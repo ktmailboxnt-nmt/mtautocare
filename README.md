@@ -12,6 +12,7 @@ Website tĩnh nhiều trang (HTML/CSS/JS thuần, không cần cài đặt gì).
 - `assets/css/style.css`: giao diện dùng chung
 - `assets/js/main.js`: loader, hiệu ứng chuyển trang, cuộn mượt, các hiệu ứng cuộn
 - `assets/logo.png`: logo nền trong suốt
+- `tools/og_image.py`: vẽ `assets/og.jpg` (ảnh xem trước khi chia sẻ link)
 - `tools/build.py`: script sinh 4 trang HTML (phần đầu trang, menu, footer dùng chung). Sửa nội dung trong file này rồi chạy `python3 tools/build.py` để tạo lại các trang.
 
 ## Xem thử

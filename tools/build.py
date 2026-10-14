@@ -22,6 +22,8 @@ def img(pid, w, alt, extra='', fallback=None):
 PHONE = '0823418418'
 PHONE_TXT = '0823 418 418'
 EMAIL = 'lienhe@mtautocare.com'
+# public address of the site; change to https://mtautocare.com/ once the domain points here
+SITE_URL = 'https://ktmailboxnt-nmt.github.io/mtautocare/'
 ADDRESS = '71A Tôn Thất Tùng, Phường Pleiku, tỉnh Gia Lai'
 ADDRESS_OLD = 'trước đây: P. Phù Đổng, TP. Pleiku'
 MAP_Q = '71A+T%C3%B4n+Th%E1%BA%A5t+T%C3%B9ng,+Pleiku,+Gia+Lai'
@@ -43,7 +45,8 @@ PAGES = [
     ('lien-he.html', 'Liên hệ'),
 ]
 
-def head(title, desc):
+def head(title, desc, fname):
+    url = SITE_URL + ('' if fname == 'index.html' else fname)
     return f'''<!doctype html>
 <html lang="vi">
 <head>
@@ -52,9 +55,19 @@ def head(title, desc):
 <meta name="theme-color" content="#0e0e0d">
 <title>{title}</title>
 <meta name="description" content="{desc}">
+<link rel="canonical" href="{url}">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MT Auto Care">
+<meta property="og:locale" content="vi_VN">
+<meta property="og:url" content="{url}">
 <meta property="og:title" content="{title}">
 <meta property="og:description" content="{desc}">
-<meta property="og:image" content="assets/logo.png">
+<meta property="og:image" content="{SITE_URL}assets/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="MT Auto Care — Chăm chút từng chi tiết">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="{SITE_URL}assets/og.jpg">
 <link rel="icon" href="assets/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -62,7 +75,7 @@ def head(title, desc):
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap&subset=vietnamese" rel="stylesheet">
 <script>document.documentElement.classList.add('js');try{{if(sessionStorage.getItem('mt-pt')==='1')document.documentElement.classList.add('pt-arrive')}}catch(e){{}}</script>
 <link rel="stylesheet" href="assets/css/style.css">
-<script type="application/ld+json">{{"@context":"https://schema.org","@type":"AutoRepair","name":"MT Auto Care","image":"assets/logo.png","telephone":"+84823418418","email":"{EMAIL}","address":{{"@type":"PostalAddress","streetAddress":"71A Tôn Thất Tùng","addressLocality":"Phường Pleiku","addressRegion":"Gia Lai","addressCountry":"VN"}},"geo":{{"@type":"GeoCoordinates","latitude":{LAT},"longitude":{LNG}}},"hasMap":"{MAP_DIR}","sameAs":["{FB}"]}}</script>
+<script type="application/ld+json">{{"@context":"https://schema.org","@type":"AutoRepair","name":"MT Auto Care","image":"{SITE_URL}assets/og.jpg","url":"{SITE_URL}","telephone":"+84823418418","email":"{EMAIL}","address":{{"@type":"PostalAddress","streetAddress":"71A Tôn Thất Tùng","addressLocality":"Phường Pleiku","addressRegion":"Gia Lai","addressCountry":"VN"}},"geo":{{"@type":"GeoCoordinates","latitude":{LAT},"longitude":{LNG}}},"hasMap":"{MAP_DIR}","sameAs":["{FB}"]}}</script>
 <noscript><style>
 .loader,.cursor,.pt{{display:none!important}}
 body.is-loading{{overflow:auto!important}}
@@ -152,7 +165,7 @@ FOOTER = f'''
 '''
 
 def page(fname, title, desc, main, nxt):
-    html = head(title, desc) + '\n<body class="is-loading">\n' + nav(fname) + '\n<main id="top">\n' + main + '\n</main>\n' + nxt + FOOTER
+    html = head(title, desc, fname) + '\n<body class="is-loading">\n' + nav(fname) + '\n<main id="top">\n' + main + '\n</main>\n' + nxt + FOOTER
     open(os.path.join(OUT, fname), 'w', encoding='utf-8').write(html)
 
 def btn(label, href, extra=''):
