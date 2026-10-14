@@ -23,7 +23,7 @@ PHONE = '0823418418'
 PHONE_TXT = '0823 418 418'
 EMAIL = 'lienhe@mtautocare.com'
 # public address of the site; change to https://mtautocare.com/ once the domain points here
-SITE_URL = 'https://ktmailboxnt-nmt.github.io/mtautocare/'
+SITE_URL = 'https://mtautocare.com/'
 ADDRESS = '71A Tôn Thất Tùng, Phường Pleiku, tỉnh Gia Lai'
 ADDRESS_OLD = 'trước đây: P. Phù Đổng, TP. Pleiku'
 MAP_Q = '71A+T%C3%B4n+Th%E1%BA%A5t+T%C3%B9ng,+Pleiku,+Gia+Lai'
