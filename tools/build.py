@@ -25,7 +25,8 @@ EMAIL = 'lienhe@mtautocare.com'
 ADDRESS = '71A Tôn Thất Tùng, Phường Pleiku, tỉnh Gia Lai'
 ADDRESS_OLD = 'trước đây: P. Phù Đổng, TP. Pleiku'
 MAP_Q = '71A+T%C3%B4n+Th%E1%BA%A5t+T%C3%B9ng,+Pleiku,+Gia+Lai'
-MAP_EMBED = f'https://www.google.com/maps?q={MAP_Q}&hl=vi&z=17&output=embed'
+LAT, LNG = '13.97610401321889', '108.02585263350848'  # exact pin from the shop's Google Maps
+MAP_EMBED = f'https://www.google.com/maps?q={LAT},{LNG}&hl=vi&z=17&output=embed'
 # the shop's own Google Maps pin (opens the exact place, with name and reviews)
 MAP_DIR = 'https://maps.app.goo.gl/7KgHm1zZEK48gmLy6'
 FB = 'https://www.facebook.com/mt.autochamsocxe'
@@ -61,7 +62,7 @@ def head(title, desc):
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap&subset=vietnamese" rel="stylesheet">
 <script>document.documentElement.classList.add('js');try{{if(sessionStorage.getItem('mt-pt')==='1')document.documentElement.classList.add('pt-arrive')}}catch(e){{}}</script>
 <link rel="stylesheet" href="assets/css/style.css">
-<script type="application/ld+json">{{"@context":"https://schema.org","@type":"AutoRepair","name":"MT Auto Care","image":"assets/logo.png","telephone":"+84823418418","email":"{EMAIL}","address":{{"@type":"PostalAddress","streetAddress":"71A Tôn Thất Tùng","addressLocality":"Phường Pleiku","addressRegion":"Gia Lai","addressCountry":"VN"}},"sameAs":["{FB}"]}}</script>
+<script type="application/ld+json">{{"@context":"https://schema.org","@type":"AutoRepair","name":"MT Auto Care","image":"assets/logo.png","telephone":"+84823418418","email":"{EMAIL}","address":{{"@type":"PostalAddress","streetAddress":"71A Tôn Thất Tùng","addressLocality":"Phường Pleiku","addressRegion":"Gia Lai","addressCountry":"VN"}},"geo":{{"@type":"GeoCoordinates","latitude":{LAT},"longitude":{LNG}}},"hasMap":"{MAP_DIR}","sameAs":["{FB}"]}}</script>
 <noscript><style>
 .loader,.cursor,.pt{{display:none!important}}
 body.is-loading{{overflow:auto!important}}
