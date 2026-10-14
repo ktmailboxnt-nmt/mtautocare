@@ -353,7 +353,7 @@ home = f'''
   </div>
 </section>
 
-'''+ visit('ghe-xuong') + '''
+'''+ visit('ghe-xuong') + f'''
 <section class="contact wrap">
   <span class="label" data-fade>(05) Đặt lịch</span>
   <a href="lien-he.html#booking" class="cta-big" data-cursor="view" data-cursor-label="Đặt lịch"><span data-split>Hãy bắt đầu</span><br><span data-split style="--d:.1s">cùng MT</span> <span class="arrow">↗</span></a>
@@ -361,7 +361,7 @@ home = f'''
     <div class="contact-info" data-fade>
       <div><span class="mono">Hotline</span><a class="big ulink" href="tel:{PHONE}">{PHONE_TXT}</a></div>
     </div>
-    <div class="contact-info" data-fade style="--d:.1s;grid-column:7/13">
+    <div class="contact-info right" data-fade style="--d:.1s">
       <div><span class="mono">Xưởng</span><a class="big ulink" href="{MAP_DIR}" target="_blank" rel="noopener">71A Tôn Thất Tùng, Pleiku ↗</a></div>
       <div><span class="mono">Facebook</span><a class="big ulink" href="{FB}" target="_blank" rel="noopener">/mt.autochamsocxe</a></div>
     </div>
@@ -521,7 +521,7 @@ contact = phero('Liên hệ — Contact', 'Liên hệ', 'Ghé thăm <span class=
   </div>
 </section>
 
-'''+ visit('map') + ''''''
+'''+ visit('map')
 page('lien-he.html', 'Liên hệ — MT Auto Care',
      'Liên hệ MT Auto Care: hotline 0823 418 418, Zalo, Facebook và đặt lịch chăm sóc xe.',
      contact, nextp('index.html', 'Trang chủ'))
