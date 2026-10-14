@@ -1,0 +1,1190 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f6f2ea">
+<meta name="description" content="MT Auto Care — chăm sóc, phục hồi và nâng cấp ô tô. Nghệ thuật chăm chút từng chi tiết cho chiếc xe của bạn.">
+<title>MT Auto Care — The Art of Automotive Care</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://images.unsplash.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap&subset=vietnamese" rel="stylesheet">
+<script>document.documentElement.classList.add('js')</script>
+<style>
+/* ============================================================
+   MT AUTO CARE — Dark Luxury Edition
+   ============================================================ */
+:root{
+  --accent:#97763f;--sand:#ece5d6;
+  --black:#0b0b0a;--ink:#121210;--ink-2:#1a1a17;
+  --ivory:#f6f2ea;--ivory-2:#ece5d6;
+  --gold:#c8a96a;--gold-soft:#e2cc9b;--gold-deep:#a38550;
+  --serif:'Cormorant Garamond',Georgia,'Times New Roman',serif;
+  --sans:'Be Vietnam Pro',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --ease:cubic-bezier(.16,1,.3,1);
+  --ease-io:cubic-bezier(.77,0,.18,1);
+  --gutter:clamp(16px,4vw,56px);
+  --header:84px;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--ivory);color:var(--ink);
+  font-family:var(--sans);font-weight:300;font-size:15px;line-height:1.75;
+  overflow-x:hidden;-webkit-font-smoothing:antialiased;
+  transition:background-color 1s var(--ease),color 1s var(--ease);
+}
+body.theme-sand{background:var(--sand)}
+body.is-loading{overflow:hidden}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer;background:none;border:0;padding:0}
+::selection{background:var(--gold);color:var(--black)}
+h1,h2,h3,p{margin:0}
+.container{width:min(1320px,100% - var(--gutter)*2);margin-inline:auto}
+.muted{color:color-mix(in srgb,currentColor 62%,transparent)}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:14px;
+  font-size:11px;font-weight:500;letter-spacing:.32em;text-transform:uppercase;color:var(--accent);
+}
+.eyebrow::before{content:"";width:34px;height:1px;background:currentColor}
+.display{
+  font-family:var(--serif);font-weight:300;
+  font-size:clamp(40px,6.2vw,96px);line-height:1.02;letter-spacing:-.02em;
+}
+.display em,.hero-title em{font-style:italic;color:var(--accent)}
+
+/* ---------- grain ---------- */
+.grain{
+  position:fixed;inset:-50%;z-index:90;pointer-events:none;opacity:.05;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation:grain 1.2s steps(6) infinite;
+}
+@keyframes grain{
+  0%{transform:translate(0,0)}20%{transform:translate(-4%,3%)}40%{transform:translate(3%,-5%)}
+  60%{transform:translate(-6%,-2%)}80%{transform:translate(5%,4%)}100%{transform:translate(0,0)}
+}
+
+/* ---------- buttons ---------- */
+.btn{
+  position:relative;display:inline-flex;align-items:center;gap:18px;overflow:hidden;isolation:isolate;
+  padding:19px 30px;border:1px solid color-mix(in srgb,currentColor 35%,transparent);border-radius:999px;
+  font-size:11px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;
+  transition:color .6s var(--ease),border-color .6s var(--ease);
+}
+.btn::before{
+  content:"";position:absolute;inset:0;z-index:-1;background:var(--gold);border-radius:inherit;
+  transform:translateY(101%);transition:transform .7s var(--ease);
+}
+.btn:hover{color:var(--black);border-color:var(--gold)}
+.btn:hover::before{transform:translateY(0)}
+.btn .arr{display:inline-block;transition:transform .6s var(--ease)}
+.btn:hover .arr{transform:translate(4px,-4px) rotate(0deg)}
+.btn-gold{background:var(--gold);color:var(--black);border-color:var(--gold)}
+.btn-gold::before{background:var(--ink)}
+.btn-gold:hover{color:var(--ivory);border-color:var(--ink)}
+.link-line{position:relative;display:inline-block;padding-bottom:4px}
+.link-line::after{
+  content:"";position:absolute;left:0;bottom:0;width:100%;height:1px;background:currentColor;
+  transform:scaleX(0);transform-origin:right;transition:transform .7s var(--ease);
+}
+.link-line:hover::after{transform:scaleX(1);transform-origin:left}
+
+/* ---------- loader ---------- */
+.loader{position:fixed;inset:0;z-index:200;display:grid;place-items:center;color:var(--ink);pointer-events:none}
+.loader-bg{position:absolute;inset:0;background:var(--ivory);transition:transform 1.25s var(--ease-io)}
+.loader-bg::after{
+  content:"";position:absolute;left:-10%;right:-10%;top:100%;height:18vh;background:var(--ivory);
+  border-radius:0 0 50% 50%;transform-origin:top;transition:transform 1.25s var(--ease-io);
+}
+.loader-content{position:relative;text-align:center;width:min(440px,84vw);transition:opacity .6s,transform 1s var(--ease-io)}
+.loader-mark{font-family:var(--serif);font-weight:300;font-size:clamp(84px,16vw,150px);line-height:1;display:flex;justify-content:center;gap:.04em}
+.loader-mark span,.loader-word span{display:inline-block;transform:translateY(110%);opacity:0;animation:rise 1.2s var(--ease) forwards}
+.loader-mark span:nth-child(2){animation-delay:.08s;font-style:italic;color:var(--accent)}
+.loader-mask{overflow:hidden;padding:.06em 0}
+.loader-word{margin-top:6px;font-size:12px;letter-spacing:.7em;padding-left:.7em}
+.loader-word span{animation-duration:1s}
+.loader-bar{position:relative;height:1px;margin:34px 0 16px;background:rgba(28,26,22,.14);overflow:hidden}
+.loader-bar i{position:absolute;inset:0;background:linear-gradient(90deg,var(--gold-deep),var(--gold-soft));transform-origin:left;transform:scaleX(0)}
+.loader-meta{display:flex;justify-content:space-between;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:rgba(28,26,22,.55)}
+.loader-count{font-variant-numeric:tabular-nums;color:var(--accent)}
+@keyframes rise{to{transform:translateY(0);opacity:1}}
+body.loaded .loader-content{opacity:0;transform:translateY(-60px)}
+body.loaded .loader-bg{transform:translateY(-118%)}
+body.loaded .loader-bg::after{transform:scaleY(0)}
+body.loader-done .loader{display:none}
+
+/* ---------- cursor ---------- */
+.cursor{position:fixed;top:0;left:0;z-index:150;pointer-events:none;display:none}
+.has-cursor .cursor{display:block}
+.cursor-dot,.cursor-ring{position:fixed;top:0;left:0;border-radius:50%;will-change:transform}
+.cursor-dot{width:6px;height:6px;margin:-3px 0 0 -3px;background:var(--gold)}
+.cursor-ring{
+  width:38px;height:38px;margin:-19px 0 0 -19px;border:1px solid rgba(200,169,106,.55);
+  display:grid;place-items:center;
+  transition:width .5s var(--ease),height .5s var(--ease),margin .5s var(--ease),background-color .5s,border-color .5s;
+}
+.cursor-label{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--black);opacity:0;transition:opacity .3s}
+.cursor.hover .cursor-ring{width:64px;height:64px;margin:-32px 0 0 -32px;border-color:var(--gold)}
+.cursor.view .cursor-ring{width:96px;height:96px;margin:-48px 0 0 -48px;background:var(--gold);border-color:var(--gold)}
+.cursor.view .cursor-label{opacity:1}
+.cursor.view .cursor-dot{opacity:0}
+.cursor.hidden{opacity:0}
+
+/* ---------- header ---------- */
+.header{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  transition:transform .8s var(--ease),background-color .6s,backdrop-filter .6s;
+}
+.header.hide{transform:translateY(-100%)}
+.header.solid{background:color-mix(in srgb,var(--ivory) 78%,transparent);box-shadow:0 1px 0 rgba(28,26,22,.07);backdrop-filter:blur(16px) saturate(140%);-webkit-backdrop-filter:blur(16px) saturate(140%)}
+body.theme-sand .header.solid{background:color-mix(in srgb,var(--sand) 80%,transparent)}
+.nav{height:var(--header);display:flex;align-items:center;justify-content:space-between;gap:24px}
+.brand{display:flex;align-items:center;gap:12px;font-size:13px;font-weight:500;letter-spacing:.34em;white-space:nowrap}
+.brand-mark{
+  display:grid;place-items:center;width:40px;height:40px;border:1px solid var(--gold);border-radius:50%;
+  font-family:var(--serif);font-size:17px;letter-spacing:0;color:var(--accent);font-style:italic;
+}
+.brand b{font-weight:500;color:var(--accent)}
+.nav-links{display:flex;gap:42px;font-size:12px;letter-spacing:.14em;text-transform:uppercase}
+.nav-links a{position:relative;opacity:.8;transition:opacity .3s}
+.nav-links a:hover{opacity:1}
+.nav-right{display:flex;align-items:center;gap:22px}
+.nav-cta{padding:13px 22px}
+.menu-btn{display:none;width:44px;height:44px;position:relative}
+.menu-btn i{position:absolute;left:11px;right:11px;height:1px;background:currentColor;transition:transform .6s var(--ease),top .6s var(--ease)}
+.menu-btn i:first-child{top:18px}.menu-btn i:last-child{top:26px}
+.menu-open .menu-btn i:first-child{top:22px;transform:rotate(45deg)}
+.menu-open .menu-btn i:last-child{top:22px;transform:rotate(-45deg)}
+.header > *{position:relative;z-index:2}
+.mobile-menu{
+  position:fixed;inset:0;z-index:1;background:var(--ivory);color:var(--ink);
+  display:flex;flex-direction:column;justify-content:center;padding:var(--header) var(--gutter) 40px;
+  clip-path:inset(0 0 100% 0);transition:clip-path 1s var(--ease-io);visibility:hidden;
+}
+.menu-open .mobile-menu{clip-path:inset(0 0 0 0);visibility:visible}
+.menu-open .header{color:var(--ink)}
+.mobile-menu a{display:block;overflow:hidden;font-family:var(--serif);font-size:clamp(42px,11vw,64px);font-weight:300;line-height:1.25}
+.mobile-menu a span{display:inline-block;transform:translateY(105%);transition:transform .9s var(--ease)}
+.menu-open .mobile-menu a span{transform:none}
+.mobile-menu a:nth-child(2) span{transition-delay:.06s}.mobile-menu a:nth-child(3) span{transition-delay:.12s}
+.mobile-menu a:nth-child(4) span{transition-delay:.18s}.mobile-menu a:nth-child(5) span{transition-delay:.24s}
+.mobile-menu small{margin-top:40px;font-size:12px;letter-spacing:.2em;color:var(--accent)}
+
+/* ---------- reveal system ---------- */
+.js [data-reveal]{opacity:0;transform:translate3d(0,48px,0);transition:opacity 1.2s var(--ease),transform 1.4s var(--ease);transition-delay:calc(var(--d,0) * 1s)}
+.js [data-reveal].in{opacity:1;transform:none}
+.js [data-reveal="fade"]{transform:none}
+.ln{display:block;overflow:hidden;padding:.12em 0 .1em;margin:-.12em 0 -.1em}
+.ln > span{display:inline-block}
+.js [data-split] .ln > span{transform:translate3d(0,115%,0) rotate(3deg);transform-origin:left top;transition:transform 1.4s var(--ease);transition-delay:calc(var(--d,0) * 1s + var(--i,0) * .1s)}
+.js [data-split].in .ln > span{transform:none}
+.js [data-clip]{clip-path:inset(100% 0 0 0);transition:clip-path 1.6s var(--ease-io);transition-delay:calc(var(--d,0) * 1s)}
+.js [data-clip].in{clip-path:inset(0 0 0 0)}
+.js [data-clip] img{transform:scale(1.3);transition:transform 2.2s var(--ease)}
+.js [data-clip].in img{transform:scale(1)}
+
+/* ---------- hero ---------- */
+.hero{position:relative;height:100svh;min-height:640px;overflow:hidden;color:var(--ink)}
+.hero-media{position:absolute;inset:0;will-change:transform}
+.hero-media-inner{position:absolute;inset:0;clip-path:inset(12% 18% 12% 18%);transform:scale(1.25);transition:clip-path 1.9s var(--ease-io),transform 2.6s var(--ease)}
+.hero-media img{width:100%;height:100%;object-fit:cover;object-position:62% 55%;filter:saturate(.8) brightness(1.06)}
+body.loaded .hero-media-inner{clip-path:inset(0 0 0 0);transform:scale(1)}
+.hero-veil{position:absolute;inset:0;pointer-events:none;
+  background:
+    linear-gradient(90deg,rgba(246,242,234,.97) 0%,rgba(246,242,234,.86) 32%,rgba(246,242,234,.35) 58%,rgba(246,242,234,0) 78%),
+    linear-gradient(0deg,rgba(246,242,234,1) 0%,rgba(246,242,234,.55) 22%,transparent 45%),
+    linear-gradient(180deg,rgba(246,242,234,.75) 0%,transparent 22%);
+}
+.hero-inner{position:relative;height:100%;display:flex;flex-direction:column;justify-content:flex-end;padding-bottom:clamp(36px,7vh,80px);will-change:transform,opacity}
+.hero-title{font-family:var(--serif);font-weight:300;font-size:clamp(54px,9.4vw,168px);line-height:.98;letter-spacing:-.03em;margin:28px 0 clamp(32px,6vh,64px)}
+.hero-title .ln:nth-child(2){padding-left:clamp(0px,8vw,150px)}
+.hero-bottom{display:grid;grid-template-columns:minmax(0,1.1fr) auto minmax(0,1fr);align-items:end;gap:40px;border-top:1px solid rgba(28,26,22,.16);padding-top:30px}
+.hero-bottom p{max-width:380px;font-size:14px;color:rgba(28,26,22,.7)}
+.hero-ctas{display:flex;gap:14px;flex-wrap:wrap}
+.scroll-cue{justify-self:end;display:flex;align-items:center;gap:16px;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:rgba(28,26,22,.6)}
+.scroll-cue i{position:relative;width:1px;height:56px;background:rgba(28,26,22,.18);overflow:hidden}
+.scroll-cue i::after{content:"";position:absolute;left:0;top:0;width:100%;height:40%;background:var(--gold);animation:cue 2.4s var(--ease-io) infinite}
+@keyframes cue{0%{transform:translateY(-100%)}100%{transform:translateY(260%)}}
+.hero-side{position:absolute;right:var(--gutter);top:50%;transform:translateY(-50%) rotate(90deg);transform-origin:right center;font-size:10px;letter-spacing:.4em;color:rgba(255,255,255,.8);white-space:nowrap}
+.hero-in{opacity:0;transform:translateY(30px);transition:opacity 1.2s var(--ease),transform 1.4s var(--ease);transition-delay:calc(.9s + var(--d,0) * 1s)}
+body.loaded .hero-in{opacity:1;transform:none}
+.hero-title .ln > span{transform:translate3d(0,115%,0) rotate(4deg);transform-origin:left top;transition:transform 1.6s var(--ease);transition-delay:calc(.75s + var(--i,0) * .12s)}
+body.loaded .hero-title .ln > span{transform:none}
+.header{opacity:0;transition:opacity 1s var(--ease) 1.2s,transform .8s var(--ease),background-color .6s}
+body.loaded .header{opacity:1}
+
+/* ---------- marquee ---------- */
+.marquee{position:relative;padding:44px 0;overflow:hidden;border-bottom:1px solid rgba(28,26,22,.08);white-space:nowrap}
+.marquee-track{display:inline-flex;will-change:transform}
+.marquee-group{display:inline-flex;align-items:center;flex-shrink:0}
+.marquee-item{font-family:var(--serif);font-weight:300;font-size:clamp(46px,7vw,110px);line-height:1;padding:0 .35em;letter-spacing:-.01em}
+.marquee-item.outline{color:transparent;-webkit-text-stroke:1px var(--accent)}
+.marquee-item.italic{font-style:italic}
+.marquee-star{color:var(--accent);font-size:clamp(22px,2.4vw,36px)}
+
+/* ---------- manifesto ---------- */
+.section{position:relative;padding:clamp(100px,16vh,190px) 0}
+.manifesto-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,3fr);gap:40px}
+.manifesto-text{font-family:var(--serif);font-weight:300;font-size:clamp(30px,3.9vw,60px);line-height:1.22;letter-spacing:-.01em}
+.manifesto-text .w{opacity:.14;transition:opacity .25s linear}
+.manifesto-text .w.gold{color:var(--accent);font-style:italic}
+.pillars{display:grid;grid-template-columns:repeat(4,1fr);margin-top:clamp(80px,12vh,140px);border-top:1px solid rgba(28,26,22,.12)}
+.pillar{padding:34px 26px 0 0}
+.pillar + .pillar{padding-left:26px;border-left:1px solid rgba(28,26,22,.12)}
+.pillar span{font-family:var(--serif);font-style:italic;font-size:22px;color:var(--accent)}
+.pillar strong{display:block;margin:14px 0 8px;font-weight:400;font-size:16px;letter-spacing:.02em}
+.pillar p{font-size:13px;line-height:1.7}
+
+/* ---------- services (horizontal) ---------- */
+.services{position:relative}
+.hs-sticky{position:relative}
+.hs-track{display:flex;gap:clamp(20px,2.6vw,40px);padding:0 var(--gutter)}
+.hs-intro{flex:0 0 min(520px,38vw);display:flex;flex-direction:column;justify-content:center;padding-right:3vw}
+.hs-intro .display{margin:28px 0 30px}
+.hs-intro p{max-width:400px;font-size:14px}
+.svc{position:relative;flex:0 0 min(460px,34vw);display:flex;flex-direction:column;justify-content:center;cursor:pointer}
+.svc-media{position:relative;height:min(62vh,600px);overflow:hidden;border-radius:4px;background:var(--sand);box-shadow:0 30px 60px -30px rgba(60,45,20,.35)}
+.svc-media img{position:absolute;top:0;left:-8%;width:116%;height:100%;object-fit:cover;filter:saturate(.75) brightness(.95);transition:filter 1s var(--ease),scale 1.4s var(--ease);will-change:transform}
+.svc:hover .svc-media img{filter:saturate(1) brightness(1);scale:1.06}
+.svc-media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,11,10,.45),transparent 30%)}
+.svc-num{position:absolute;z-index:2;top:22px;left:24px;font-size:11px;letter-spacing:.3em;color:#fff}
+.svc-body{padding-top:26px;display:grid;grid-template-columns:1fr auto;gap:8px 20px;align-items:start}
+.svc h3{font-family:var(--serif);font-weight:300;font-size:clamp(30px,2.6vw,42px);line-height:1.08}
+.svc-go{width:52px;height:52px;border-radius:50%;border:1px solid rgba(28,26,22,.25);display:grid;place-items:center;transition:background .6s var(--ease),border-color .6s,color .6s,transform .6s var(--ease)}
+.svc:hover .svc-go{background:var(--ink);border-color:var(--ink);color:var(--ivory);transform:rotate(45deg)}
+.svc-tags{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.svc-tags span{font-size:11px;letter-spacing:.06em;padding:6px 12px;border:1px solid rgba(28,26,22,.14);border-radius:99px;color:rgba(28,26,22,.7)}
+.hs-end{flex:0 0 min(420px,32vw);display:flex;flex-direction:column;justify-content:center;gap:28px;padding-right:var(--gutter)}
+.hs-end h3{font-family:var(--serif);font-weight:300;font-size:clamp(34px,3.2vw,52px);line-height:1.1}
+.hs-progress{position:absolute;left:var(--gutter);right:var(--gutter);bottom:clamp(24px,5vh,48px);display:flex;align-items:center;gap:22px;font-size:10px;letter-spacing:.3em;color:rgba(28,26,22,.55)}
+.hs-progress .bar{flex:1;height:1px;background:rgba(28,26,22,.12);overflow:hidden}
+.hs-progress .bar i{display:block;height:100%;background:var(--accent);transform-origin:left;transform:scaleX(0)}
+@media (min-width:901px){
+  .hs-sticky{position:sticky;top:0;height:100vh;overflow:hidden;display:flex;align-items:center}
+  .hs-track{will-change:transform}
+}
+
+/* ---------- cinema ---------- */
+.cinema{position:relative;height:320vh;color:var(--ivory)}
+.cinema-sticky{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden}
+.cinema-frame{position:absolute;inset:0;clip-path:inset(var(--cy,18%) var(--cx,24%) round var(--cr,24px));will-change:clip-path}
+.cinema-scene{position:absolute;inset:0}
+.cinema-scene img{width:100%;height:100%;object-fit:cover;transform:scale(var(--cs,1.3));will-change:transform}
+.cinema-scene.two{opacity:var(--c2,0)}
+.cinema-shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(8,8,7,.78),rgba(8,8,7,.18) 75%),linear-gradient(0deg,rgba(8,8,7,.6),transparent 35%);opacity:var(--cshade,0)}
+.cinema-copy{position:absolute;left:var(--gutter);right:var(--gutter);top:50%;transform:translateY(-50%)}
+.cinema-set{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%)}
+.cinema-set h2{font-family:var(--serif);font-weight:300;font-size:clamp(50px,8.4vw,150px);line-height:1;letter-spacing:-.03em}
+.cinema-set h2 em{font-style:italic;color:var(--gold-soft)}
+.cinema-set .ln > span{will-change:transform}
+.cinema-set p{margin-top:30px;max-width:440px;font-size:clamp(14px,1.2vw,17px);color:rgba(246,242,234,.8)}
+.cinema-hud{position:absolute;left:var(--gutter);right:var(--gutter);display:flex;justify-content:space-between;align-items:center;font-size:10px;letter-spacing:.3em;text-transform:uppercase;opacity:var(--cshade,0)}
+.cinema-hud.top{top:calc(var(--header) + 16px)}
+.cinema-hud.bottom{bottom:clamp(24px,5vh,48px);gap:24px}
+.cinema-hud .track{flex:1;max-width:320px;height:1px;background:rgba(246,242,234,.3);overflow:hidden}
+.cinema-hud .track i{display:block;height:100%;background:var(--gold);transform-origin:left;transform:scaleX(var(--cp,0))}
+.cinema-pre{position:absolute;inset:0;display:grid;place-items:center;text-align:center;pointer-events:none;opacity:var(--cpre,1)}
+.cinema-pre{align-items:start;padding-top:calc(var(--header) + 4vh)}
+.cinema-pre span{font-size:11px;letter-spacing:.5em;color:var(--accent);text-transform:uppercase}
+
+/* ---------- philosophy (light) ---------- */
+.philo-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(40px,8vw,130px);align-items:center}
+.philo-media{position:relative;aspect-ratio:4/5;overflow:hidden;border-radius:4px}
+.philo-media img{position:absolute;left:0;top:-12%;width:100%;height:124%;object-fit:cover;filter:saturate(.7)}
+.philo-badge{
+  position:absolute;right:-1px;bottom:-1px;z-index:2;width:clamp(120px,13vw,170px);aspect-ratio:1;border-radius:50%;
+  background:var(--sand);display:grid;place-items:center;
+}
+.philo-badge svg{position:absolute;inset:10px;width:calc(100% - 20px);height:calc(100% - 20px);animation:spin 22s linear infinite}
+.philo-badge text{font-size:9.6px;letter-spacing:3.3px;fill:var(--ink);font-family:var(--sans);text-transform:uppercase}
+.philo-badge b{font-family:var(--serif);font-style:italic;font-weight:400;font-size:30px;color:var(--gold-deep)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.philo-copy .display{margin:28px 0 34px}
+.philo-copy .display em{color:var(--gold-deep)}
+.philo-copy p{max-width:480px;margin-bottom:22px}
+.philo-sign{margin:42px 0 44px;display:flex;align-items:center;gap:18px;font-family:var(--serif);font-style:italic;font-size:26px}
+.philo-sign::before{content:"";width:60px;height:1px;background:var(--gold-deep)}
+
+/* ---------- values list (light) ---------- */
+.values-head{display:flex;justify-content:space-between;align-items:end;gap:40px;margin-bottom:clamp(50px,8vh,90px)}
+.values-head .display{margin-top:26px}
+.values-head .display em{color:var(--gold-deep)}
+.values-head p{max-width:330px}
+.vrow{
+  position:relative;display:grid;grid-template-columns:90px minmax(0,1.2fr) minmax(0,1fr) 60px;gap:30px;align-items:center;
+  padding:38px 0;border-top:1px solid color-mix(in srgb,currentColor 16%,transparent);
+}
+.vrow:last-child{border-bottom:1px solid color-mix(in srgb,currentColor 16%,transparent)}
+.vrow::before{content:"";position:absolute;left:0;top:-1px;width:100%;height:1px;background:var(--gold-deep);transform:scaleX(0);transform-origin:left;transition:transform 1s var(--ease)}
+.vrow:hover::before{transform:scaleX(1)}
+.vrow .n{font-family:var(--serif);font-style:italic;font-size:26px;color:var(--gold-deep)}
+.vrow h3{font-family:var(--serif);font-weight:300;font-size:clamp(28px,3vw,46px);line-height:1.1;transition:transform .8s var(--ease)}
+.vrow:hover h3{transform:translateX(14px)}
+.vrow p{font-size:14px}
+.vrow .icon{justify-self:end;font-size:22px;color:var(--gold-deep);transition:transform .8s var(--ease)}
+.vrow:hover .icon{transform:rotate(45deg)}
+
+/* ---------- process ---------- */
+.process-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;align-items:end;margin-bottom:clamp(60px,10vh,110px)}
+.process-head .display{margin-top:26px}
+.process-head p{max-width:420px;justify-self:end}
+.steps{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:30px;padding-top:54px}
+.steps-line{position:absolute;top:0;left:0;right:0;height:1px;background:rgba(28,26,22,.12)}
+.steps-line i{position:absolute;inset:0;background:linear-gradient(90deg,var(--gold),var(--accent));transform-origin:left;transform:scaleX(var(--sp,0))}
+.step{position:relative;opacity:.3;transition:opacity .8s var(--ease)}
+.step.on{opacity:1}
+.step::before{content:"";position:absolute;top:-59px;left:0;width:11px;height:11px;border-radius:50%;background:var(--ivory);border:1px solid rgba(28,26,22,.3);transition:background .6s,border-color .6s,box-shadow .6s}
+.step.on::before{background:var(--gold);border-color:var(--gold);box-shadow:0 0 0 6px rgba(200,169,106,.15)}
+.step .k{font-family:var(--serif);font-size:58px;font-weight:300;line-height:1;color:var(--accent)}
+.step h3{margin:18px 0 10px;font-weight:400;font-size:18px}
+.step p{font-size:13px}
+
+/* ---------- gallery ---------- */
+.gallery{position:relative;height:clamp(640px,135vh,1300px);overflow:hidden}
+.gallery-cols{position:absolute;inset:-12% var(--gutter);display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(12px,1.6vw,24px)}
+.gcol{display:flex;flex-direction:column;gap:clamp(12px,1.6vw,24px);will-change:transform}
+.gcol figure{margin:0;overflow:hidden;border-radius:4px;background:var(--sand)}
+.gcol img{width:100%;aspect-ratio:3/4;object-fit:cover;filter:saturate(.7);transition:filter 1s var(--ease),transform 1.6s var(--ease)}
+.gcol figure:hover img{filter:saturate(1);transform:scale(1.05)}
+.gcol.c2{margin-top:-20%}
+.gallery-title{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;text-align:center;z-index:2}
+.gallery-title h2{font-family:var(--serif);font-weight:300;font-size:clamp(56px,11vw,190px);line-height:.95;letter-spacing:-.03em;color:#fff;text-shadow:0 10px 70px rgba(20,16,10,.45)}
+.gallery-title h2 em{font-style:italic}
+.gallery::before,.gallery::after{content:"";position:absolute;left:0;right:0;height:22%;z-index:1;pointer-events:none}
+.gallery::before{top:0;background:linear-gradient(180deg,var(--ivory),transparent)}
+.gallery::after{bottom:0;background:linear-gradient(0deg,var(--ivory),transparent)}
+
+/* ---------- contact ---------- */
+.contact-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(40px,8vw,120px);align-items:start}
+.contact .display{margin:28px 0 30px}
+.contact-lines{margin-top:56px;display:grid;gap:4px}
+.contact-lines a{display:flex;justify-content:space-between;align-items:center;padding:22px 0;border-bottom:1px solid rgba(28,26,22,.12);font-family:var(--serif);font-size:clamp(24px,2.4vw,34px);font-weight:300;transition:color .5s,padding .7s var(--ease)}
+.contact-lines a small{font-family:var(--sans);font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:rgba(28,26,22,.5)}
+.contact-lines a:hover{color:var(--accent);padding-left:14px}
+.form{position:relative;padding:clamp(28px,4vw,56px);border:1px solid rgba(28,26,22,.12);border-radius:6px;background:rgba(255,255,255,.6);box-shadow:0 40px 80px -40px rgba(60,45,20,.25);display:grid;gap:26px}
+.form h3{font-family:var(--serif);font-weight:300;font-size:34px}
+.field{position:relative}
+.field input,.field textarea,.field select{
+  width:100%;padding:24px 0 10px;border:0;border-bottom:1px solid rgba(28,26,22,.2);background:transparent;outline:0;border-radius:0;
+  font-size:15px;transition:border-color .5s;resize:none;-webkit-appearance:none;appearance:none;
+}
+.field select{cursor:pointer}
+.field select option{background:#fff;color:var(--ink)}
+.field label{position:absolute;left:0;top:22px;font-size:14px;color:rgba(28,26,22,.55);pointer-events:none;transform-origin:left top;transition:transform .5s var(--ease),color .5s}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--gold)}
+.field input:focus + label,.field input:not(:placeholder-shown) + label,
+.field textarea:focus + label,.field textarea:not(:placeholder-shown) + label,
+.field.static label{transform:translateY(-20px) scale(.78);color:var(--accent)}
+.field.static::after{content:"↓";position:absolute;right:0;bottom:12px;color:var(--accent);pointer-events:none}
+.field .bar{position:absolute;left:0;bottom:0;height:1px;width:100%;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform .7s var(--ease)}
+.field :focus ~ .bar{transform:scaleX(1)}
+.form .btn{justify-self:start}
+.form small{font-size:12px;line-height:1.6}
+
+/* ---------- footer ---------- */
+.footer{position:relative;background:var(--sand);padding:clamp(80px,12vh,140px) 0 34px;overflow:hidden;border-top:1px solid rgba(28,26,22,.08)}
+.footer-top{display:grid;grid-template-columns:minmax(0,2fr) repeat(2,minmax(0,1fr));gap:40px}
+.footer-top h4{margin:0 0 18px;font-size:10px;font-weight:500;letter-spacing:.3em;text-transform:uppercase;color:var(--accent)}
+.footer-top p{max-width:360px;font-family:var(--serif);font-size:26px;font-weight:300;line-height:1.3}
+.footer-top ul{list-style:none;margin:0;padding:0;display:grid;gap:10px;font-size:14px}
+.wordmark{margin:clamp(70px,12vh,140px) 0 26px;font-family:var(--serif);font-weight:300;font-size:clamp(40px,12.4vw,220px);line-height:.85;letter-spacing:-.03em;white-space:nowrap;display:flex;justify-content:space-between;gap:.18em;overflow:hidden}
+.wordmark .ch{display:inline-block;overflow:hidden;padding-bottom:.06em}
+.wordmark .ch > span{display:inline-block;transform:translateY(105%);transition:transform 1.4s var(--ease);transition-delay:calc(var(--i) * .05s)}
+.wordmark.in .ch > span{transform:none}
+.wordmark .gold{color:var(--accent);font-style:italic}
+.footer-bottom{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;padding-top:26px;border-top:1px solid rgba(28,26,22,.1);font-size:11px;letter-spacing:.12em;color:rgba(28,26,22,.5)}
+
+/* ---------- back to top ---------- */
+.totop{position:fixed;right:clamp(16px,2.4vw,32px);bottom:clamp(16px,2.4vw,32px);z-index:80;width:54px;height:54px;border-radius:50%;
+  display:grid;place-items:center;background:color-mix(in srgb,var(--ivory) 80%,transparent);color:var(--ink);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  opacity:0;transform:translateY(16px) scale(.9);pointer-events:none;transition:opacity .6s var(--ease),transform .6s var(--ease)}
+.totop.show{opacity:1;transform:none;pointer-events:auto}
+.totop svg{position:absolute;inset:0;transform:rotate(-90deg)}
+.totop circle{fill:none;stroke-width:1.5}
+.totop .bg{stroke:rgba(28,26,22,.15)}
+.totop .fg{stroke:var(--accent);stroke-dasharray:157;stroke-dashoffset:157}
+
+/* ---------- light theme text tweaks ---------- */
+
+/* ---------- responsive ---------- */
+@media (max-width:1100px){
+  .nav-links{gap:28px}
+  .hero-bottom{grid-template-columns:1fr auto}
+  .scroll-cue{display:none}
+}
+@media (max-width:900px){
+  :root{--header:72px}
+  .nav-links,.nav-cta{display:none}
+  .menu-btn{display:block}
+  .hero-side{display:none}
+  .hero-bottom{grid-template-columns:1fr;gap:26px}
+  .manifesto-grid{grid-template-columns:1fr;gap:26px}
+  .pillars{grid-template-columns:1fr 1fr}
+  .pillar{padding:28px 18px 28px 0!important;border-left:0!important;border-bottom:1px solid rgba(28,26,22,.12)}
+  .pillar:nth-child(even){padding-left:18px!important;border-left:1px solid rgba(28,26,22,.12)!important}
+  .hs-track{flex-direction:column;gap:70px}
+  .hs-intro,.svc,.hs-end{flex:none;width:100%;padding-right:0}
+  .svc-media{height:auto;aspect-ratio:4/5}
+  .hs-progress{display:none}
+  .cinema{height:260vh}
+  .philo-grid,.contact-grid,.process-head{grid-template-columns:1fr}
+  .process-head p{justify-self:start}
+  .values-head{display:block}
+  .values-head p{margin-top:22px}
+  .vrow{grid-template-columns:50px 1fr 30px;gap:8px 18px}
+  .vrow p{grid-column:2/3}
+  .vrow .icon{grid-row:1;grid-column:3}
+  .steps{grid-template-columns:1fr 1fr;gap:50px 26px}
+  .steps-line{display:none}
+  .step{opacity:1}
+  .step::before{display:none}
+  .footer-top{grid-template-columns:1fr 1fr}
+  .footer-top > div:first-child{grid-column:1/-1}
+}
+@media (max-width:600px){
+  body{font-size:14px}
+  .brand{gap:10px;font-size:11px;letter-spacing:.26em}
+  .brand-mark{width:34px;height:34px;font-size:15px}
+  .hero{min-height:560px}
+  .hero-title .ln:nth-child(2){padding-left:0}
+  .btn{padding:16px 22px;letter-spacing:.18em}
+  .pillars{grid-template-columns:1fr}
+  .pillar,.pillar:nth-child(even){padding:24px 0!important;border-left:0!important}
+  .steps{grid-template-columns:1fr}
+  .gallery-cols{grid-template-columns:1fr 1fr}
+  .gcol.c3{display:none}
+  .cinema-set h2{font-size:clamp(44px,13vw,72px)}
+  .cinema-hud.bottom span:last-child{display:none}
+  .wordmark{font-size:clamp(30px,11.5vw,120px)}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .js [data-reveal],.js [data-split] .ln > span,.hero-title .ln > span,.hero-in,.wordmark .ch > span{opacity:1!important;transform:none!important}
+  .js [data-clip],.hero-media-inner{clip-path:none!important;transform:none!important}
+  .js [data-clip] img{transform:none!important}
+  .cinema{height:auto}
+  .cinema-sticky{position:relative}
+  .cinema-frame{clip-path:none!important}
+  .cinema-set.two,.cinema-pre,.cinema-scene.two{display:none}
+  .cinema-shade,.cinema-hud{opacity:1!important}
+  .manifesto-text .w{opacity:1!important}
+  .grain{display:none}
+}
+</style>
+<noscript><style>
+.loader,.cursor{display:none!important}
+.hero-media-inner{clip-path:none!important;transform:none!important}
+.hero-title .ln > span,.hero-in{transform:none!important;opacity:1!important}
+.header{opacity:1!important}
+.manifesto-text .w{opacity:1!important}
+.cinema{height:auto!important}.cinema-sticky{position:relative!important}.cinema-frame{clip-path:none!important}
+.cinema-set.two,.cinema-pre{display:none!important}.cinema-shade,.cinema-hud{opacity:1!important}
+body.is-loading{overflow:auto!important}
+</style></noscript>
+</head>
+<body class="is-loading">
+
+<!-- ============ LOADER ============ -->
+<div class="loader" id="loader" aria-hidden="true">
+  <div class="loader-bg"></div>
+  <div class="loader-content">
+    <div class="loader-mask loader-mark"><span>M</span><span>T</span></div>
+    <div class="loader-mask loader-word" id="loaderWord">AUTO CARE</div>
+    <div class="loader-bar"><i id="loaderBar"></i></div>
+    <div class="loader-meta"><span>The Art of Automotive Care</span><span class="loader-count" id="loaderCount">000</span></div>
+  </div>
+</div>
+
+<div class="grain" aria-hidden="true"></div>
+<div class="cursor" id="cursor" aria-hidden="true"><div class="cursor-dot"></div><div class="cursor-ring"><span class="cursor-label">Xem</span></div></div>
+
+<!-- ============ HEADER ============ -->
+<header class="header" id="header">
+  <nav class="nav container" aria-label="Điều hướng chính">
+    <a href="#home" class="brand" aria-label="MT Auto Care — về đầu trang"><span class="brand-mark">mt</span><span>MT <b>AUTO</b> CARE</span></a>
+    <div class="nav-links">
+      <a href="#services" class="link-line">Dịch vụ</a>
+      <a href="#about" class="link-line">Triết lý</a>
+      <a href="#process" class="link-line">Quy trình</a>
+      <a href="#contact" class="link-line">Liên hệ</a>
+    </div>
+    <div class="nav-right">
+      <a href="#contact" class="btn nav-cta" data-magnetic>Đặt lịch <span class="arr">↗</span></a>
+      <button class="menu-btn" id="menuBtn" aria-label="Mở menu" aria-expanded="false" aria-controls="mobileMenu"><i></i><i></i></button>
+    </div>
+  </nav>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#home"><span>Trang chủ</span></a>
+    <a href="#services"><span>Dịch vụ</span></a>
+    <a href="#about"><span>Triết lý</span></a>
+    <a href="#process"><span>Quy trình</span></a>
+    <a href="#contact"><span>Liên hệ</span></a>
+    <small>0823 418 418 · lienhe@mtautocare.com</small>
+  </div>
+</header>
+
+<main>
+<!-- ============ HERO ============ -->
+<section class="hero" id="home" data-theme="light">
+  <div class="hero-media" id="heroMedia">
+    <div class="hero-media-inner">
+      <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=2000&q=85" alt="Xe thể thao sang trọng dưới ánh sáng" fetchpriority="high" data-preload>
+    </div>
+  </div>
+  <div class="hero-veil"></div>
+  <div class="hero-side">A NEW STANDARD OF CARE — MMXXVI</div>
+  <div class="hero-inner container" id="heroInner">
+    <div class="eyebrow hero-in" style="--d:.15">Premium Detailing · Restoration · Upgrades</div>
+    <h1 class="hero-title">
+      <span class="ln" style="--i:0"><span>Chăm chút</span></span>
+      <span class="ln" style="--i:1"><span>từng <em>chi tiết,</em></span></span>
+      <span class="ln" style="--i:2"><span>nâng tầm trải nghiệm.</span></span>
+    </h1>
+    <div class="hero-bottom">
+      <p class="hero-in" style="--d:.45">Từ chăm sóc, phục hồi đến nâng cấp ô tô — mỗi dịch vụ là một dấu ấn của sự chỉn chu, tinh tế và tận tâm.</p>
+      <div class="hero-ctas hero-in" style="--d:.55">
+        <a class="btn btn-gold" href="#services" data-magnetic>Khám phá dịch vụ <span class="arr">↗</span></a>
+        <a class="btn" href="#contact" data-magnetic>Tư vấn ngay</a>
+      </div>
+      <div class="scroll-cue hero-in" style="--d:.7"><i></i>Cuộn để khám phá</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MARQUEE ============ -->
+<div class="marquee" aria-hidden="true" data-theme="light">
+  <div class="marquee-track" id="marquee">
+    <div class="marquee-group">
+      <span class="marquee-item">Detailing</span><span class="marquee-star">✦</span>
+      <span class="marquee-item outline italic">Restoration</span><span class="marquee-star">✦</span>
+      <span class="marquee-item">Protection</span><span class="marquee-star">✦</span>
+      <span class="marquee-item outline italic">Upgrades</span><span class="marquee-star">✦</span>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MANIFESTO ============ -->
+<section class="section manifesto" data-theme="light">
+  <div class="container">
+    <div class="manifesto-grid">
+      <div><span class="eyebrow" data-reveal>Về MT Auto Care</span></div>
+      <p class="manifesto-text" id="manifesto">Mỗi chiếc xe là một câu chuyện riêng. Chúng tôi lắng nghe, chăm chút và gìn giữ vẻ đẹp ấy bằng sự [tận tâm,] kỹ thuật chuẩn mực và con mắt của [người làm nghề.]</p>
+    </div>
+    <div class="pillars">
+      <div class="pillar" data-reveal><span>01</span><strong>Chăm sóc chuyên sâu</strong><p class="muted">Làm sạch, dưỡng và bảo vệ đến từng chi tiết nhỏ nhất.</p></div>
+      <div class="pillar" data-reveal style="--d:.1"><span>02</span><strong>Phục hồi thẩm mỹ</strong><p class="muted">Đưa vẻ đẹp nguyên bản trở lại với nội và ngoại thất.</p></div>
+      <div class="pillar" data-reveal style="--d:.2"><span>03</span><strong>Nâng cấp tiện nghi</strong><p class="muted">Giải pháp nâng cấp tinh tế, phù hợp phong cách riêng.</p></div>
+      <div class="pillar" data-reveal style="--d:.3"><span>04</span><strong>Tư vấn tận tâm</strong><p class="muted">Rõ ràng, minh bạch và đúng với nhu cầu thực tế.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SERVICES (horizontal) ============ -->
+<section class="services" id="services" data-theme="light">
+  <div class="hs-sticky" id="hsSticky">
+    <div class="hs-track" id="hsTrack">
+      <div class="hs-intro">
+        <span class="eyebrow" data-reveal>01 — Dịch vụ</span>
+        <h2 class="display" data-split><span class="ln" style="--i:0"><span>Dịch vụ xứng tầm</span></span><span class="ln" style="--i:1"><span><em>chiếc xe</em> của bạn.</span></span></h2>
+        <p class="muted" data-reveal style="--d:.2">Giải pháp chăm sóc, bảo vệ và nâng cấp được thực hiện tỉ mỉ — để mỗi lần cầm lái là một trải nghiệm đáng nhớ.</p>
+      </div>
+
+      <a href="#contact" class="svc" data-cursor="view" data-service="Chăm sóc & làm đẹp ô tô">
+        <div class="svc-media" data-clip>
+          <span class="svc-num">01 / DETAILING</span>
+          <img loading="lazy" src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1100&q=80" alt="Chăm sóc và làm đẹp ô tô" data-hx>
+        </div>
+        <div class="svc-body">
+          <h3>Chăm sóc &amp;<br>làm đẹp ô tô</h3>
+          <span class="svc-go">↗</span>
+          <div class="svc-tags"><span>Vệ sinh chi tiết</span><span>Hiệu chỉnh sơn</span><span>Phủ bảo vệ</span></div>
+        </div>
+      </a>
+
+      <a href="#contact" class="svc" data-cursor="view" data-service="Phục hồi nội ngoại thất">
+        <div class="svc-media" data-clip style="--d:.1">
+          <span class="svc-num">02 / RESTORATION</span>
+          <img loading="lazy" src="https://images.unsplash.com/photo-1507136566006-cfc505b114fc?auto=format&fit=crop&w=1100&q=80" alt="Phục hồi nội ngoại thất" data-hx>
+        </div>
+        <div class="svc-body">
+          <h3>Phục hồi<br>nội &amp; ngoại thất</h3>
+          <span class="svc-go">↗</span>
+          <div class="svc-tags"><span>Nội thất da</span><span>Khoang máy</span><span>Đèn &amp; chi tiết nhựa</span></div>
+        </div>
+      </a>
+
+      <a href="#contact" class="svc" data-cursor="view" data-service="Nâng cấp tiện nghi">
+        <div class="svc-media" data-clip style="--d:.2">
+          <span class="svc-num">03 / UPGRADES</span>
+          <img loading="lazy" src="https://images.unsplash.com/photo-1489824904134-891ab64532f1?auto=format&fit=crop&w=1100&q=80" alt="Nâng cấp tiện nghi ô tô" data-hx>
+        </div>
+        <div class="svc-body">
+          <h3>Nâng cấp<br>tiện nghi ô tô</h3>
+          <span class="svc-go">↗</span>
+          <div class="svc-tags"><span>Tiện nghi nội thất</span><span>Âm thanh</span><span>Phụ kiện</span></div>
+        </div>
+      </a>
+
+      <div class="hs-end">
+        <span class="eyebrow">Dịch vụ riêng</span>
+        <h3>Chưa thấy điều <em style="color:var(--accent)">bạn cần?</em></h3>
+        <p class="muted">Hãy kể cho chúng tôi về chiếc xe của bạn — MT Auto Care sẽ đề xuất giải pháp phù hợp nhất.</p>
+        <div><a href="#contact" class="btn" data-magnetic>Trao đổi với chúng tôi <span class="arr">↗</span></a></div>
+      </div>
+    </div>
+    <div class="hs-progress" aria-hidden="true"><span id="hsCount">01 / 03</span><span class="bar"><i id="hsBar"></i></span><span>Cuộn để xem tiếp</span></div>
+  </div>
+</section>
+
+<!-- ============ CINEMA ============ -->
+<section class="cinema" id="experience" aria-label="Trải nghiệm MT Auto Care" data-theme="light">
+  <div class="cinema-sticky" id="cinemaSticky">
+    <div class="cinema-pre"><span>The Experience</span></div>
+    <div class="cinema-frame">
+      <div class="cinema-scene one"><img loading="lazy" src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=2000&q=85" alt="Thiết kế xe thể thao sang trọng"></div>
+      <div class="cinema-scene two"><img loading="lazy" src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=2000&q=85" alt="Đường nét xe thể thao"></div>
+      <div class="cinema-shade"></div>
+      <div class="cinema-hud top"><span>MT Auto Care / The Experience</span><span id="cinemaCount">01 — 02</span></div>
+      <div class="cinema-copy">
+        <div class="cinema-set one" id="cset1">
+          <h2><span class="ln"><span>Một chiếc xe.</span></span><span class="ln"><span>Một dấu ấn <em>riêng.</em></span></span></h2>
+          <p class="cl">Chạm đến từng chi tiết — từ lớp sơn, đường chỉ khâu đến cảm giác sau vô lăng.</p>
+        </div>
+        <div class="cinema-set two" id="cset2">
+          <h2><span class="ln"><span>Không chỉ là vẻ ngoài —</span></span><span class="ln"><span>đó là <em>niềm tự hào.</em></span></span></h2>
+          <p class="cl">Cảm giác tự hào trong từng hành trình, mỗi khi bạn nhìn lại chiếc xe của mình.</p>
+        </div>
+      </div>
+      <div class="cinema-hud bottom"><span>Cuộn để trải nghiệm</span><span class="track"><i></i></span><span>Scroll / 002</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PHILOSOPHY (light) ============ -->
+<section class="section philo" id="about" data-theme="sand">
+  <div class="container philo-grid">
+    <div class="philo-media" data-clip>
+      <img loading="lazy" src="https://images.unsplash.com/photo-1494976388531-d1058494cdd8?auto=format&fit=crop&w=1200&q=85" alt="Chi tiết thân xe cổ điển" data-speed="0.08" data-fallback="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=1200&q=85">
+      <div class="philo-badge" aria-hidden="true">
+        <svg viewBox="0 0 100 100"><defs><path id="circ" d="M50,50 m-40,0 a40,40 0 1,1 80,0 a40,40 0 1,1 -80,0"/></defs><text><textPath href="#circ">The Art of Automotive Care · MT ·</textPath></text></svg>
+        <b>mt</b>
+      </div>
+    </div>
+    <div class="philo-copy">
+      <span class="eyebrow" style="color:var(--gold-deep)" data-reveal>02 — Triết lý MT</span>
+      <h2 class="display" data-split><span class="ln" style="--i:0"><span>Không chỉ là</span></span><span class="ln" style="--i:1"><span>chăm sóc xe.</span></span><span class="ln" style="--i:2"><span><em>Đó là nghệ thuật.</em></span></span></h2>
+      <p class="muted" data-reveal>Mỗi chiếc xe đều xứng đáng được quan tâm đúng cách. MT Auto Care hướng tới trải nghiệm dịch vụ chỉn chu, rõ ràng và phù hợp với nhu cầu riêng của từng khách hàng.</p>
+      <p class="muted" data-reveal style="--d:.1">Chúng tôi tin rằng sự sang trọng không nằm ở những điều phô trương, mà ở cách từng chi tiết nhỏ được đối xử bằng sự tôn trọng.</p>
+      <div class="philo-sign" data-reveal style="--d:.2">MT Auto Care</div>
+      <div data-reveal style="--d:.25"><a class="btn" href="#contact" data-magnetic>Kết nối với chúng tôi <span class="arr">↗</span></a></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ VALUES (light) ============ -->
+<section class="section values" id="values" data-theme="sand" style="padding-top:0">
+  <div class="container">
+    <div class="values-head">
+      <div>
+        <span class="eyebrow" style="color:var(--gold-deep)" data-reveal>03 — Vì sao chọn MT</span>
+        <h2 class="display" data-split><span class="ln" style="--i:0"><span>Đẳng cấp nằm ở</span></span><span class="ln" style="--i:1"><span><em>những điều tinh tế.</em></span></span></h2>
+      </div>
+      <p class="muted" data-reveal style="--d:.2">Ba cam kết định hình cách MT Auto Care đồng hành cùng bạn và chiếc xe của bạn.</p>
+    </div>
+    <div class="vlist">
+      <div class="vrow" data-reveal><span class="n">01</span><h3>Tư vấn theo nhu cầu</h3><p class="muted">Định hướng giải pháp phù hợp với chiếc xe, mục tiêu sử dụng và ngân sách của bạn.</p><span class="icon">↗</span></div>
+      <div class="vrow" data-reveal style="--d:.08"><span class="n">02</span><h3>Dịch vụ đa dạng</h3><p class="muted">Chăm sóc, phục hồi, bảo vệ và nâng cấp trong một trải nghiệm thống nhất.</p><span class="icon">↗</span></div>
+      <div class="vrow" data-reveal style="--d:.16"><span class="n">03</span><h3>Trải nghiệm chỉn chu</h3><p class="muted">Ưu tiên sự rõ ràng, thuận tiện và chăm chút trong từng điểm chạm.</p><span class="icon">↗</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROCESS ============ -->
+<section class="section process" id="process" data-theme="light">
+  <div class="container">
+    <div class="process-head">
+      <div>
+        <span class="eyebrow" data-reveal>04 — Quy trình</span>
+        <h2 class="display" data-split><span class="ln" style="--i:0"><span>Bốn bước,</span></span><span class="ln" style="--i:1"><span>một <em>chuẩn mực.</em></span></span></h2>
+      </div>
+      <p class="muted" data-reveal style="--d:.2">Mọi dịch vụ tại MT Auto Care đều đi qua một quy trình rõ ràng để bạn luôn an tâm về chiếc xe của mình.</p>
+    </div>
+    <div class="steps" id="steps">
+      <div class="steps-line"><i></i></div>
+      <div class="step"><div class="k">01</div><h3>Tiếp nhận &amp; lắng nghe</h3><p class="muted">Trao đổi về tình trạng xe, thói quen sử dụng và mong muốn của bạn.</p></div>
+      <div class="step"><div class="k">02</div><h3>Kiểm tra &amp; đề xuất</h3><p class="muted">Đánh giá thực tế và đưa ra phương án, chi phí minh bạch.</p></div>
+      <div class="step"><div class="k">03</div><h3>Thực hiện tỉ mỉ</h3><p class="muted">Từng công đoạn được làm cẩn thận theo đúng quy chuẩn kỹ thuật.</p></div>
+      <div class="step"><div class="k">04</div><h3>Bàn giao &amp; đồng hành</h3><p class="muted">Bàn giao, hướng dẫn bảo quản và đồng hành trong suốt quá trình sử dụng.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ GALLERY ============ -->
+<section class="gallery" id="gallery" data-theme="light" aria-label="Thư viện hình ảnh">
+  <div class="gallery-cols">
+    <div class="gcol c1" data-gspeed="-0.12">
+      <figure><img loading="lazy" src="https://images.unsplash.com/photo-1544636331-e26879cd4d9b?auto=format&fit=crop&w=700&q=80" alt="Xe thể thao" data-fallback="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=700&q=80"></figure>
+      <figure><img loading="lazy" src="https://images.unsplash.com/photo-1507136566006-cfc505b114fc?auto=format&fit=crop&w=700&q=80" alt="Chi tiết ô tô"></figure>
+      <figure><img loading="lazy" src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=700&q=80" alt="Xe thể thao màu đỏ"></figure>
+    </div>
+    <div class="gcol c2" data-gspeed="0.16">
+      <figure><img loading="lazy" src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=700&q=80" alt="Xe thể thao sang trọng"></figure>
+      <figure><img loading="lazy" src="https://images.unsplash.com/photo-1494976388531-d1058494cdd8?auto=format&fit=crop&w=700&q=80" alt="Xe cổ điển" data-fallback="https://images.unsplash.com/photo-1489824904134-891ab64532f1?auto=format&fit=crop&w=700&q=80"></figure>
+      <figure><img loading="lazy" src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=700&q=80" alt="Ô tô sau khi chăm sóc"></figure>
+      <figure><img loading="lazy" src="https://images.unsplash.com/photo-1489824904134-891ab64532f1?auto=format&fit=crop&w=700&q=80" alt="Nội thất ô tô"></figure>
+    </div>
+    <div class="gcol c3" data-gspeed="-0.06">
+      <figure><img loading="lazy" src="https://images.unsplash.com/photo-1583121274602-3e2820c69888?auto=format&fit=crop&w=700&q=80" alt="Siêu xe" data-fallback="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=700&q=80"></figure>
+      <figure><img loading="lazy" src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=700&q=80" alt="Xe thể thao"></figure>
+      <figure><img loading="lazy" src="https://images.unsplash.com/photo-1507136566006-cfc505b114fc?auto=format&fit=crop&w=700&q=80" alt="Chi tiết xe"></figure>
+    </div>
+  </div>
+  <div class="gallery-title"><h2 data-split><span class="ln" style="--i:0"><span>Finer</span></span><span class="ln" style="--i:1"><span><em>details.</em></span></span></h2></div>
+</section>
+
+<!-- ============ CONTACT ============ -->
+<section class="section contact" id="contact" data-theme="light">
+  <div class="container contact-grid">
+    <div>
+      <span class="eyebrow" data-reveal>05 — Liên hệ</span>
+      <h2 class="display" data-split><span class="ln" style="--i:0"><span>Chiếc xe của bạn.</span></span><span class="ln" style="--i:1"><span>Sự <em>tận tâm</em></span></span><span class="ln" style="--i:2"><span>của chúng tôi.</span></span></h2>
+      <p class="muted" data-reveal style="--d:.2">Liên hệ MT Auto Care để trao đổi về nhu cầu chăm sóc, phục hồi hoặc nâng cấp xe. Chúng tôi luôn sẵn lòng lắng nghe.</p>
+      <div class="contact-lines" data-reveal style="--d:.3">
+        <a href="tel:0823418418"><span>0823 418 418</span><small>Hotline ↗</small></a>
+        <a href="mailto:lienhe@mtautocare.com"><span>lienhe@mtautocare.com</span><small>Email ↗</small></a>
+      </div>
+    </div>
+    <form class="form" id="booking" data-reveal style="--d:.15" novalidate>
+      <h3>Yêu cầu tư vấn</h3>
+      <div class="field"><input id="f-name" name="name" required placeholder=" " autocomplete="name"><label for="f-name">Họ và tên</label><span class="bar"></span></div>
+      <div class="field"><input id="f-phone" name="phone" required type="tel" placeholder=" " autocomplete="tel"><label for="f-phone">Số điện thoại</label><span class="bar"></span></div>
+      <div class="field static"><select id="f-service" name="service"><option>Chăm sóc &amp; làm đẹp ô tô</option><option>Phục hồi nội ngoại thất</option><option>Nâng cấp tiện nghi</option><option>Dịch vụ khác</option></select><label for="f-service">Dịch vụ quan tâm</label><span class="bar"></span></div>
+      <div class="field"><textarea id="f-msg" name="message" rows="2" placeholder=" "></textarea><label for="f-msg">Lời nhắn</label><span class="bar"></span></div>
+      <button class="btn btn-gold" type="submit" data-magnetic>Gửi yêu cầu tư vấn <span class="arr">↗</span></button>
+      <small class="muted" id="formNote">Nút gửi sẽ mở ứng dụng email của bạn với nội dung đã điền sẵn.</small>
+    </form>
+  </div>
+</section>
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer" data-theme="light">
+  <div class="container">
+    <div class="footer-top">
+      <div><h4>MT Auto Care</h4><p>Chăm chút từng chi tiết, nâng tầm <em style="color:var(--accent)">trải nghiệm.</em></p></div>
+      <div><h4>Khám phá</h4><ul><li><a class="link-line" href="#services">Dịch vụ</a></li><li><a class="link-line" href="#about">Triết lý</a></li><li><a class="link-line" href="#process">Quy trình</a></li><li><a class="link-line" href="#contact">Liên hệ</a></li></ul></div>
+      <div><h4>Liên hệ</h4><ul><li><a class="link-line" href="tel:0823418418">0823 418 418</a></li><li><a class="link-line" href="mailto:lienhe@mtautocare.com">lienhe@mtautocare.com</a></li></ul></div>
+    </div>
+    <div class="wordmark" id="wordmark" aria-label="MT Auto Care">MT AUTO CARE</div>
+    <div class="footer-bottom"><span>© <span id="year">2026</span> MT AUTO CARE. All rights reserved.</span><span>Designed for a finer drive.</span></div>
+  </div>
+</footer>
+
+<button class="totop" id="totop" aria-label="Về đầu trang">
+  <svg viewBox="0 0 54 54" aria-hidden="true"><circle class="bg" cx="27" cy="27" r="25"/><circle class="fg" id="totopRing" cx="27" cy="27" r="25"/></svg>
+  <span>↑</span>
+</button>
+
+<script>
+(() => {
+'use strict';
+const $ = (s, c = document) => c.querySelector(s);
+const $$ = (s, c = document) => [...c.querySelectorAll(s)];
+const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+const lerp = (a, b, t) => a + (b - a) * t;
+const smoothstep = v => v * v * (3 - 2 * v);
+const easeOut = v => 1 - Math.pow(1 - v, 3);
+const range = (v, a, b) => clamp((v - a) / (b - a));
+
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const finePointer = matchMedia('(hover: hover) and (pointer: fine)').matches;
+const body = document.body;
+let vw = innerWidth, vh = innerHeight;
+
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+
+/* ---------- image fallbacks ---------- */
+$$('img[data-fallback]').forEach(img => {
+  const swap = () => { if (img.dataset.fallback) { img.src = img.dataset.fallback; img.removeAttribute('data-fallback'); } };
+  img.addEventListener('error', swap);
+  if (img.complete && img.naturalWidth === 0 && img.currentSrc) swap();
+});
+
+/* ---------- split helpers ---------- */
+const word = $('#loaderWord');
+word.innerHTML = [...word.textContent].map((c, i) =>
+  `<span style="animation-delay:${.25 + i * .04}s">${c === ' ' ? '&nbsp;' : c}</span>`).join('');
+
+const wm = $('#wordmark');
+let wi = 0;
+wm.innerHTML = wm.textContent.split(' ').map((w, idx) =>
+  `<span class="${idx === 1 ? 'gold' : ''}" style="display:inline-flex">` +
+  [...w].map(c => `<span class="ch" aria-hidden="true"><span style="--i:${wi++}">${c}</span></span>`).join('') +
+  `</span>`).join('');
+
+const manifesto = $('#manifesto');
+{
+  const html = manifesto.textContent.trim().replace(/\[([^\]]+)\]/g, (_, g) => g.split(' ').map(x => '§' + x).join(' '));
+  manifesto.innerHTML = html.split(/\s+/).map(w =>
+    w.startsWith('§') ? `<span class="w gold">${w.slice(1)}</span>` : `<span class="w">${w}</span>`).join(' ');
+}
+const mWords = $$('.w', manifesto);
+
+/* ---------- loader ---------- */
+const loaderBar = $('#loaderBar'), loaderCount = $('#loaderCount');
+const preload = $$('img[data-preload]');
+let loadedCount = 0, total = preload.length + 1, shown = 0, done = false;
+const startT = performance.now();
+const markLoaded = () => { loadedCount++; };
+preload.forEach(img => {
+  if (img.complete) markLoaded();
+  else { img.addEventListener('load', markLoaded, { once: true }); img.addEventListener('error', markLoaded, { once: true }); }
+});
+(document.fonts ? document.fonts.ready : Promise.resolve()).then(markLoaded);
+
+function finishLoading() {
+  if (done) return; done = true;
+  window.scrollTo(0, 0);
+  body.classList.add('loaded');
+  body.classList.remove('is-loading');
+  setTimeout(() => body.classList.add('loader-done'), 1600);
+  measure();
+}
+function tickLoader(now) {
+  if (done) return;
+  const elapsed = now - startT;
+  const real = loadedCount / total;
+  const timeCap = clamp(elapsed / 1600);           // minimum show time for elegance
+  const target = Math.min(real, timeCap) * 100;
+  const forced = elapsed > 5000;                   // safety cap on slow networks
+  shown = forced ? lerp(shown, 100, .2) : lerp(shown, target, .08);
+  if (target >= 100 && shown > 99.4) shown = 100;
+  loaderBar.style.transform = `scaleX(${shown / 100})`;
+  loaderCount.textContent = String(Math.round(shown)).padStart(3, '0');
+  if (shown >= 99.9 || (forced && shown > 99)) {
+    loaderCount.textContent = '100'; loaderBar.style.transform = 'scaleX(1)';
+    setTimeout(finishLoading, 280);
+    return;
+  }
+  requestAnimationFrame(tickLoader);
+}
+if (reduced) { finishLoading(); body.classList.add('loader-done'); }
+else requestAnimationFrame(tickLoader);
+
+/* ---------- smooth scroll (wheel on desktop) ---------- */
+const smooth = { on: finePointer && !reduced, active: false, target: 0, current: 0, k: .1 };
+const maxScroll = () => document.documentElement.scrollHeight - innerHeight;
+if (smooth.on) {
+  addEventListener('wheel', e => {
+    if (e.ctrlKey) return;
+    if (body.classList.contains('is-loading')) { e.preventDefault(); return; }
+    if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
+    if (e.target.closest && e.target.closest('textarea, select, [data-native-scroll]')) return;
+    if (body.classList.contains('menu-open')) return;
+    e.preventDefault();
+    let d = e.deltaY;
+    if (e.deltaMode === 1) d *= 40; else if (e.deltaMode === 2) d *= innerHeight;
+    if (!smooth.active) smooth.current = smooth.target = scrollY;
+    smooth.target = clamp(smooth.target + d, 0, maxScroll());
+    smooth.k = .1;
+    smooth.active = true;
+  }, { passive: false });
+  addEventListener('scroll', () => { if (!smooth.active) smooth.current = smooth.target = scrollY; }, { passive: true });
+  ['keydown', 'mousedown', 'touchstart'].forEach(ev => addEventListener(ev, e => {
+    if (ev === 'mousedown' && e.target !== document.documentElement) return; // scrollbar drag
+    smooth.active = false;
+  }, { passive: true }));
+}
+function scrollToY(y) {
+  y = clamp(y, 0, maxScroll());
+  if (smooth.on) {
+    if (!smooth.active) smooth.current = scrollY;
+    smooth.target = y; smooth.k = .065; smooth.active = true;
+  } else window.scrollTo({ top: y, behavior: reduced ? 'auto' : 'smooth' });
+}
+$$('a[href^="#"]').forEach(a => a.addEventListener('click', e => {
+  const id = a.getAttribute('href');
+  const el = id === '#' || id === '#home' ? document.body : $(id);
+  if (!el) return;
+  e.preventDefault();
+  closeMenu();
+  scrollToY(el === document.body ? 0 : el.getBoundingClientRect().top + scrollY);
+  if (a.dataset.service === undefined && a.closest('.svc')) {
+    const s = a.closest('.svc').dataset.service; const sel = $('#f-service');
+    [...sel.options].forEach(o => { if (o.text === s) sel.value = o.value; });
+  }
+}));
+
+/* ---------- reveals ---------- */
+const revealEls = $$('[data-reveal],[data-split],[data-clip],#wordmark');
+if ('IntersectionObserver' in window && !reduced) {
+  // clipped elements report no intersection, so watch their parent instead
+  const targets = new Map();
+  const io = new IntersectionObserver(entries => entries.forEach(en => {
+    if (!en.isIntersecting) return;
+    (targets.get(en.target) || []).forEach(el => el.classList.add('in'));
+    io.unobserve(en.target);
+  }), { threshold: .15, rootMargin: '0px 0px -6% 0px' });
+  revealEls.forEach(el => {
+    const watch = el.hasAttribute('data-clip') ? el.parentElement : el;
+    if (!targets.has(watch)) targets.set(watch, []);
+    targets.get(watch).push(el);
+    io.observe(watch);
+  });
+} else revealEls.forEach(el => el.classList.add('in'));
+
+/* ---------- theme switch (dark <-> ivory) ---------- */
+const themed = $$('[data-theme]');
+function updateTheme() {
+  const mid = vh * .5;
+  let theme = 'light';
+  for (const s of themed) { const r = s.getBoundingClientRect(); if (r.top <= mid && r.bottom > mid) { theme = s.dataset.theme; break; } }
+  body.classList.toggle('theme-sand', theme === 'sand');
+}
+
+/* ---------- header / menu / totop ---------- */
+const header = $('#header'), menuBtn = $('#menuBtn'), totop = $('#totop'), ring = $('#totopRing');
+let lastY = 0;
+function openMenu() { body.classList.add('menu-open'); menuBtn.setAttribute('aria-expanded', 'true'); menuBtn.setAttribute('aria-label', 'Đóng menu'); }
+function closeMenu() { body.classList.remove('menu-open'); menuBtn.setAttribute('aria-expanded', 'false'); menuBtn.setAttribute('aria-label', 'Mở menu'); }
+menuBtn.addEventListener('click', () => body.classList.contains('menu-open') ? closeMenu() : openMenu());
+addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
+totop.addEventListener('click', () => scrollToY(0));
+
+/* ---------- cursor + magnetic ---------- */
+const cursor = $('#cursor');
+const cDot = $('.cursor-dot', cursor), cRing = $('.cursor-ring', cursor);
+const mouse = { x: vw / 2, y: vh / 2 }, ringPos = { x: vw / 2, y: vh / 2 };
+if (finePointer && !reduced) {
+  document.documentElement.classList.add('has-cursor');
+  addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; cursor.classList.remove('hidden'); }, { passive: true });
+  document.addEventListener('mouseleave', () => cursor.classList.add('hidden'));
+  document.addEventListener('mouseover', e => {
+    const t = e.target.closest && e.target.closest('a, button, select, input, textarea, [data-cursor]');
+    cursor.classList.toggle('view', !!(t && t.dataset.cursor === 'view'));
+    cursor.classList.toggle('hover', !!(t && t.dataset.cursor !== 'view'));
+  });
+  $$('[data-magnetic]').forEach(el => {
+    el.addEventListener('mousemove', e => {
+      const r = el.getBoundingClientRect();
+      const x = (e.clientX - r.left - r.width / 2) * .28, y = (e.clientY - r.top - r.height / 2) * .38;
+      el.style.transform = `translate(${x}px, ${y}px)`;
+    });
+    el.addEventListener('mouseleave', () => { el.style.transition = 'transform .8s cubic-bezier(.16,1,.3,1), color .6s, border-color .6s'; el.style.transform = ''; setTimeout(() => el.style.transition = '', 800); });
+  });
+}
+
+/* ---------- marquee ---------- */
+const mq = $('#marquee');
+const mGroup = $('.marquee-group', mq);
+for (let i = 0; i < 3; i++) mq.appendChild(mGroup.cloneNode(true));
+let mqX = 0, mqDir = -1, mqW = 0;
+
+/* ---------- measurements ---------- */
+const heroMedia = $('#heroMedia'), heroInner = $('#heroInner');
+const services = $('#services'), hsSticky = $('#hsSticky'), hsTrack = $('#hsTrack'), hsBar = $('#hsBar'), hsCount = $('#hsCount');
+const hsImgs = $$('img[data-hx]', hsTrack);
+const cinema = $('#experience'), cSticky = $('#cinemaSticky'), cset1 = $('#cset1'), cset2 = $('#cset2'), cCount = $('#cinemaCount');
+const steps = $('#steps'), stepEls = $$('.step', steps);
+const gallery = $('#gallery'), gcols = $$('.gcol', gallery);
+const speedImgs = $$('img[data-speed]');
+let hsDist = 0, hsOn = false;
+const off = el => { const r = el.getBoundingClientRect(); return { top: r.top + scrollY, h: r.height }; };
+let M = {};
+
+function measure() {
+  vw = innerWidth; vh = innerHeight;
+  hsOn = vw > 900 && !reduced;
+  if (hsOn) {
+    hsTrack.style.transform = 'none';
+    hsDist = Math.max(0, hsTrack.scrollWidth - vw);
+    services.style.height = (hsDist + vh) + 'px';
+  } else {
+    services.style.height = ''; hsTrack.style.transform = '';
+    hsImgs.forEach(i => i.style.transform = '');
+  }
+  mqW = mGroup.getBoundingClientRect().width;
+  M = {
+    services: off(services), cinema: off(cinema), steps: off(steps), gallery: off(gallery),
+    manifesto: off(manifesto),
+    speed: speedImgs.map(img => off(img.parentElement))
+  };
+  lastScroll = -1;
+}
+
+/* ---------- per-frame scroll scenes ---------- */
+let lastScroll = -1;
+function scenes(y) {
+  // hero parallax
+  if (y < vh * 1.3) {
+    const p = y / vh;
+    heroMedia.style.transform = `translate3d(0, ${y * .35}px, 0) scale(${1 + p * .08})`;
+    heroInner.style.transform = `translate3d(0, ${y * -.12}px, 0)`;
+    heroInner.style.opacity = clamp(1 - p * 1.25).toFixed(3);
+  }
+
+  // header state
+  header.classList.toggle('solid', y > vh * .6);
+  if (!body.classList.contains('menu-open')) header.classList.toggle('hide', y > lastY + 2 && y > vh * .8);
+  if (y < lastY - 2 || y < vh * .8) header.classList.remove('hide');
+  lastY = y;
+
+  // to-top ring
+  const docP = clamp(y / Math.max(1, maxScroll()));
+  ring.style.strokeDashoffset = (157 * (1 - docP)).toFixed(1);
+  totop.classList.toggle('show', y > vh);
+
+  // manifesto words light up
+  {
+    const { top, h } = M.manifesto;
+    const p = range(y + vh, top + vh * .1, top + h + vh * .35);
+    const n = mWords.length;
+    mWords.forEach((w, i) => { w.style.opacity = (0.14 + 0.86 * clamp(p * n * 1.1 - i)).toFixed(3); });
+  }
+
+  // horizontal services
+  if (hsOn) {
+    const { top } = M.services;
+    const p = range(y, top, top + hsDist);
+    hsTrack.style.transform = `translate3d(${-p * hsDist}px,0,0)`;
+    hsBar.style.transform = `scaleX(${p})`;
+    hsCount.textContent = `0${Math.min(3, 1 + Math.floor(p * 3.2))} / 03`;
+    if (y > top - vh && y < top + hsDist + vh) {
+      hsImgs.forEach(img => {
+        const r = img.parentElement.getBoundingClientRect();
+        const c = (r.left + r.width / 2 - vw / 2) / vw;
+        img.style.transform = `translate3d(${(-c * 6).toFixed(2)}%,0,0)`;
+      });
+    }
+  }
+
+  // cinema
+  {
+    const { top, h } = M.cinema;
+    if (y > top - vh && y < top + h) {
+      const t = range(y, top, top + h - vh);
+      const open = easeOut(range(t, 0, .32));
+      const st = cSticky.style;
+      st.setProperty('--cy', (18 * (1 - open)).toFixed(2) + '%');
+      st.setProperty('--cx', (vw > 600 ? 26 : 8) * (1 - open) + '%');
+      st.setProperty('--cr', (24 * (1 - open)).toFixed(1) + 'px');
+      st.setProperty('--cs', (1.3 - open * .22 - t * .08).toFixed(4));
+      st.setProperty('--cshade', smoothstep(range(t, .18, .34)).toFixed(3));
+      st.setProperty('--cpre', (1 - range(t, .02, .16)).toFixed(3));
+      st.setProperty('--cp', t.toFixed(4));
+      st.setProperty('--c2', smoothstep(range(t, .56, .74)).toFixed(3));
+      setSet(cset1, range(t, .26, .42), range(t, .52, .62));
+      setSet(cset2, range(t, .66, .82), 0);
+      cCount.textContent = t < .6 ? '01 — 02' : '02 — 02';
+    }
+  }
+
+  // image parallax
+  speedImgs.forEach((img, i) => {
+    const { top, h } = M.speed[i];
+    if (y + vh < top || y > top + h) return;
+    const c = (top + h / 2 - (y + vh / 2)) / vh;
+    img.style.transform = `translate3d(0, ${(c * parseFloat(img.dataset.speed) * 100).toFixed(2)}%, 0)`;
+  });
+
+  // process line
+  {
+    const { top, h } = M.steps;
+    const p = range(y + vh, top + vh * .2, top + h + vh * .45);
+    steps.style.setProperty('--sp', p.toFixed(4));
+    stepEls.forEach((s, i) => s.classList.toggle('on', p >= i / stepEls.length + .04 || vw <= 900));
+  }
+
+  // gallery columns
+  {
+    const { top, h } = M.gallery;
+    if (y + vh > top && y < top + h) {
+      const p = (y + vh - top) / (h + vh) - .5;
+      gcols.forEach(c => c.style.transform = `translate3d(0, ${(p * parseFloat(c.dataset.gspeed) * h).toFixed(1)}px, 0)`);
+    }
+  }
+
+  updateTheme();
+}
+
+function setSet(el, inP, outP) {
+  const lines = $$('.ln > span', el), para = $('.cl', el);
+  lines.forEach((l, i) => {
+    const a = easeOut(clamp(inP * 1.3 - i * .25));
+    const b = smoothstep(clamp(outP * 1.3 - i * .2));
+    l.style.transform = `translate3d(0, ${((1 - a) * 115 - b * 115).toFixed(2)}%, 0)`;
+  });
+  const pa = easeOut(clamp(inP * 1.4 - .4)), pb = smoothstep(outP);
+  para.style.opacity = (pa * (1 - pb)).toFixed(3);
+  para.style.transform = `translate3d(0, ${((1 - pa) * 20 - pb * 20).toFixed(1)}px, 0)`;
+}
+
+/* ---------- main loop ---------- */
+let prev = performance.now();
+function frame(now) {
+  const dt = Math.min(64, now - prev) / 16.667; prev = now;
+
+  if (smooth.active) {
+    const k = 1 - Math.pow(1 - smooth.k, dt);
+    smooth.current = lerp(smooth.current, smooth.target, k);
+    if (Math.abs(smooth.target - smooth.current) < .4) { smooth.current = smooth.target; smooth.active = false; }
+    window.scrollTo(0, smooth.current);
+  }
+
+  const y = scrollY;
+  const vel = y - (frame.lastY ?? y); frame.lastY = y;
+
+  if (!reduced) {
+    // marquee follows scroll direction & velocity
+    if (vel !== 0) mqDir = vel > 0 ? -1 : 1;
+    mqX += (mqDir * .55 + mqDir * Math.min(Math.abs(vel), 60) * .25) * dt;
+    if (mqW) { if (mqX <= -mqW) mqX += mqW; if (mqX > 0) mqX -= mqW; }
+    const skew = clamp(vel * .06, -6, 6);
+    mq.style.transform = `translate3d(${mqX}px,0,0) skewX(${skew}deg)`;
+
+    // cursor
+    if (finePointer) {
+      ringPos.x = lerp(ringPos.x, mouse.x, 1 - Math.pow(.82, dt));
+      ringPos.y = lerp(ringPos.y, mouse.y, 1 - Math.pow(.82, dt));
+      cDot.style.transform = `translate3d(${mouse.x}px,${mouse.y}px,0)`;
+      cRing.style.transform = `translate3d(${ringPos.x}px,${ringPos.y}px,0)`;
+    }
+  }
+
+  if (y !== lastScroll) { lastScroll = y; scenes(y); }
+  requestAnimationFrame(frame);
+}
+
+/* ---------- form ---------- */
+$('#booking').addEventListener('submit', e => {
+  e.preventDefault();
+  const f = e.currentTarget, note = $('#formNote');
+  const d = new FormData(f);
+  if (!d.get('name').trim() || !d.get('phone').trim()) {
+    note.textContent = 'Vui lòng điền họ tên và số điện thoại để chúng tôi liên hệ lại.';
+    note.style.color = 'var(--accent)';
+    (d.get('name').trim() ? $('#f-phone') : $('#f-name')).focus();
+    return;
+  }
+  const bodyTxt = `Họ tên: ${d.get('name')}\nSố điện thoại: ${d.get('phone')}\nDịch vụ: ${d.get('service')}\nLời nhắn: ${d.get('message')}`;
+  location.href = `mailto:lienhe@mtautocare.com?subject=${encodeURIComponent('Yêu cầu tư vấn MT Auto Care')}&body=${encodeURIComponent(bodyTxt)}`;
+  note.textContent = 'Cảm ơn bạn! Ứng dụng email đang được mở để gửi yêu cầu.';
+  note.style.color = 'var(--accent)';
+});
+$('#year').textContent = new Date().getFullYear();
+
+/* ---------- init ---------- */
+let rT;
+addEventListener('resize', () => { clearTimeout(rT); rT = setTimeout(measure, 120); }, { passive: true });
+addEventListener('load', measure);
+if (document.fonts) document.fonts.ready.then(measure);
+measure();
+requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
