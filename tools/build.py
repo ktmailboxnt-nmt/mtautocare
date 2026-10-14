@@ -26,7 +26,7 @@ ADDRESS = '71A Tôn Thất Tùng, Phường Pleiku, tỉnh Gia Lai'
 ADDRESS_OLD = 'trước đây: P. Phù Đổng, TP. Pleiku'
 MAP_Q = '71A+T%C3%B4n+Th%E1%BA%A5t+T%C3%B9ng,+Pleiku,+Gia+Lai'
 LAT, LNG = '13.97610401321889', '108.02585263350848'  # exact pin from the shop's Google Maps
-MAP_EMBED = f'https://www.google.com/maps?q={LAT},{LNG}&hl=vi&z=17&output=embed'
+MAP_EMBED = f'https://maps.google.com/maps?q={LAT},{LNG}&z=17&hl=vi&output=embed'
 # the shop's own Google Maps pin (opens the exact place, with name and reviews)
 MAP_DIR = 'https://maps.app.goo.gl/7KgHm1zZEK48gmLy6'
 FB = 'https://www.facebook.com/mt.autochamsocxe'
@@ -157,6 +157,29 @@ def page(fname, title, desc, main, nxt):
 
 def btn(label, href, extra=''):
     return f'<a href="{href}" class="btn"{extra}><span class="btn-roll"><span data-t="{label}">{label}</span></span><span class="btn-ico"><i>→</i><i>→</i></span></a>'
+
+def visit(anchor):
+    return f'''
+<section class="sec wrap" id="{anchor}">
+  <div class="visit">
+    <div class="visit-info">
+      <span class="label" data-fade>Địa chỉ</span>
+      <h2 class="h-l" data-split>Ghé xưởng.</h2>
+      <dl data-fade>
+        <div><dt>Địa chỉ</dt><dd>{ADDRESS}<br><small class="muted" style="font-size:14px">({ADDRESS_OLD})</small></dd></div>
+        <div><dt>Giờ làm việc</dt><dd>Vui lòng gọi trước để đặt lịch</dd></div>
+        <div><dt>Hotline</dt><dd><a class="ulink" href="tel:{PHONE}">{PHONE_TXT}</a></dd></div>
+      </dl>
+      <div data-fade>{btn('Chỉ đường Google Maps', MAP_DIR, ' target="_blank" rel="noopener"')}</div>
+    </div>
+    <div class="visit-map" data-fade>
+      <div class="grid-bg"></div>
+      <div><div class="pin"></div><p>{ADDRESS}</p></div>
+      <iframe src="{MAP_EMBED}" title="Bản đồ MT Auto — {ADDRESS}" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+      <a class="map-dir mono" href="{MAP_DIR}" target="_blank" rel="noopener">Mở Google Maps ↗</a>
+    </div>
+  </div>
+</section>'''
 
 def phero(label, crumb, h1, lead, media=None):
     m = ''
@@ -317,6 +340,7 @@ home = f'''
   </div>
 </section>
 
+'''+ visit('ghe-xuong') + '''
 <section class="contact wrap">
   <span class="label" data-fade>(05) Đặt lịch</span>
   <a href="lien-he.html#booking" class="cta-big" data-cursor="view" data-cursor-label="Đặt lịch"><span data-split>Hãy bắt đầu</span><br><span data-split style="--d:.1s">cùng MT</span> <span class="arrow">↗</span></a>
@@ -484,26 +508,7 @@ contact = phero('Liên hệ — Contact', 'Liên hệ', 'Ghé thăm <span class=
   </div>
 </section>
 
-<section class="sec wrap">
-  <div class="visit">
-    <div class="visit-info">
-      <span class="label" data-fade>Địa chỉ</span>
-      <h2 class="h-l" data-split>Ghé xưởng.</h2>
-      <dl data-fade>
-        <div><dt>Địa chỉ</dt><dd>{ADDRESS}<br><small class="muted" style="font-size:14px">({ADDRESS_OLD})</small></dd></div>
-        <div><dt>Giờ làm việc</dt><dd>Vui lòng gọi trước để đặt lịch</dd></div>
-        <div><dt>Hotline</dt><dd><a class="ulink" href="tel:{PHONE}">{PHONE_TXT}</a></dd></div>
-      </dl>
-      <div data-fade>{btn('Chỉ đường Google Maps', MAP_DIR, ' target="_blank" rel="noopener"')}</div>
-    </div>
-    <div class="visit-map" data-fade>
-      <div class="grid-bg"></div>
-      <div><div class="pin"></div><p>{ADDRESS}</p></div>
-      <iframe src="{MAP_EMBED}" title="Bản đồ MT Auto — {ADDRESS}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
-      <a class="map-dir mono" href="{MAP_DIR}" target="_blank" rel="noopener">Mở Google Maps ↗</a>
-    </div>
-  </div>
-</section>'''
+'''+ visit('map') + ''''''
 page('lien-he.html', 'Liên hệ — MT Auto Care',
      'Liên hệ MT Auto Care: hotline 0823 418 418, Zalo, Facebook và đặt lịch chăm sóc xe.',
      contact, nextp('index.html', 'Trang chủ'))
