@@ -25,7 +25,7 @@ EMAIL = 'lienhe@mtautocare.com'
 ADDRESS = '71A Tôn Thất Tùng, Phường Pleiku, tỉnh Gia Lai'
 ADDRESS_OLD = 'trước đây: P. Phù Đổng, TP. Pleiku'
 MAP_Q = '71A+T%C3%B4n+Th%E1%BA%A5t+T%C3%B9ng,+Pleiku,+Gia+Lai'
-LAT, LNG = '13.976182', '108.025384'  # MT Auto's business pin on Google Maps (west side of Tôn Thất Tùng)
+LAT, LNG = '13.976097447147358', '108.02574437143453'  # MT Auto's pin, as provided by the shop
 MAP_EMBED = f'https://maps.google.com/maps?q={LAT},{LNG}&z=17&hl=vi&output=embed'
 # the shop's own Google Maps pin (opens the exact place, with name and reviews)
 MAP_DIR = 'https://maps.app.goo.gl/7KgHm1zZEK48gmLy6'
