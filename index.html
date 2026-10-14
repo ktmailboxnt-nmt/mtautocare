@@ -319,13 +319,23 @@ body.loaded .hero-title .wd > span{transform:none}
 .foot-row .brand-fallback{font-size:24px}
 .foot-row .mono{display:block;color:rgba(247,246,243,.45);margin-bottom:14px}
 .foot-row li{margin-bottom:6px}
-.foot-mark{font-size:clamp(56px,18.4vw,360px);line-height:.74;letter-spacing:-.07em;font-weight:500;white-space:nowrap;overflow:hidden;padding-top:.04em;margin-bottom:-.02em}
+.foot-mark{font-size:clamp(40px,9vw,140px);line-height:1;letter-spacing:-.05em;font-weight:500;white-space:nowrap;overflow:hidden;text-align:center;padding:.08em 0 .14em;margin-top:20px}
 .foot-mark span{display:inline-block;transform:translateY(100%);transition:transform 1.4s var(--ease);transition-delay:calc(var(--i) * 45ms)}
 .foot-mark .a{color:var(--accent)}
 .foot-mark.in span{transform:none}
 .foot-bottom{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;padding-block:20px;border-top:1px solid var(--line-inv);color:rgba(247,246,243,.45)}
 
 /* ---------- scroll progress ---------- */
+/* ---------- back to top (always floating) ---------- */
+.totop{position:fixed;right:clamp(14px,2.2vw,28px);bottom:clamp(14px,2.2vw,28px);z-index:180;width:56px;height:56px;border-radius:50%;display:grid;place-items:center;background:var(--ink);color:var(--paper);border:1px solid rgba(255,255,255,.14);box-shadow:0 10px 30px -10px rgba(0,0,0,.45);opacity:0;transform:translateY(16px);transition:opacity .8s var(--ease) 1.4s,transform .8s var(--ease) 1.4s,background .4s,color .4s}
+body.loaded .totop{opacity:1;transform:none}
+.totop:hover{background:var(--accent);color:var(--ink)}
+.totop svg{position:absolute;inset:-1px;width:calc(100% + 2px);height:calc(100% + 2px);transform:rotate(-90deg);pointer-events:none}
+.totop circle{fill:none;stroke:var(--accent);stroke-width:2;stroke-dasharray:170;stroke-dashoffset:170;stroke-linecap:round}
+.totop span{font-size:18px;line-height:1;transition:transform .5s var(--ease)}
+.totop:hover span{transform:translateY(-3px)}
+.menu-open .totop{opacity:0;pointer-events:none}
+@media (max-width:640px){.totop{width:48px;height:48px}}
 .progress{position:fixed;left:0;top:0;height:2px;width:100%;background:var(--accent);transform-origin:left;transform:scaleX(0);z-index:210}
 
 /* ---------- responsive ---------- */
@@ -412,6 +422,7 @@ body.is-loading{overflow:auto!important}
 </div>
 
 <div class="progress" id="progress" aria-hidden="true"></div>
+<button class="totop" id="totop" aria-label="Về đầu trang"><svg viewBox="0 0 58 58" aria-hidden="true"><circle id="totopRing" cx="29" cy="29" r="27"/></svg><span>↑</span></button>
 <div class="cursor" id="cursor" aria-hidden="true"><div class="cursor-dot"><span>Xem</span></div></div>
 
 <!-- HEADER -->
@@ -863,7 +874,7 @@ function measure() {
   // footer wordmark always spans the full width, whatever font is rendered
   fm.style.fontSize = '100px';
   { const ch = fm.children, w = ch[ch.length - 1].getBoundingClientRect().right - ch[0].getBoundingClientRect().left;
-    fm.style.fontSize = Math.floor(100 * fm.clientWidth / w * .985) + 'px'; }
+    fm.style.fontSize = Math.floor(Math.min(100 * fm.clientWidth / w * .985, Math.max(40, vw * .09))) + 'px'; }
   cardTop = cards.map(c => parseFloat(getComputedStyle(c).top) || 0);
   M = { intro: off(intro), zoom: off(zoom), gallery: off(gallery), steps: steps.map(off),
         speed: speedImgs.map(i => off(i.parentElement)), r1: row1.scrollWidth, r2: row2.scrollWidth };
@@ -873,7 +884,9 @@ function measure() {
 /* ---------- scroll scenes ---------- */
 let lastY = 0;
 function scenes(y) {
-  progress.style.transform = `scaleX(${clamp(y / Math.max(1, maxScroll()))})`;
+  const docP = clamp(y / Math.max(1, maxScroll()));
+  progress.style.transform = `scaleX(${docP})`;
+  totopRing.style.strokeDashoffset = (170 * (1 - docP)).toFixed(1);
 
   if (!body.classList.contains('menu-open')) {
     if (y > lastY + 4 && y > vh * .5) header.classList.add('hide');
@@ -975,6 +988,10 @@ function frame(now) {
   }
   requestAnimationFrame(frame);
 }
+
+/* ---------- back to top ---------- */
+const totopRing = $('#totopRing');
+$('#totop').addEventListener('click', () => scrollToY(0));
 
 /* ---------- form ---------- */
 $('#booking').addEventListener('submit', e => {
