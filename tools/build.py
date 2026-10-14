@@ -22,6 +22,11 @@ def img(pid, w, alt, extra='', fallback=None):
 PHONE = '0823418418'
 PHONE_TXT = '0823 418 418'
 EMAIL = 'lienhe@mtautocare.com'
+ADDRESS = '71A Tôn Thất Tùng, Phường Pleiku, tỉnh Gia Lai'
+ADDRESS_OLD = 'trước đây: P. Phù Đổng, TP. Pleiku'
+MAP_Q = '71A+T%C3%B4n+Th%E1%BA%A5t+T%C3%B9ng,+Pleiku,+Gia+Lai'
+MAP_EMBED = f'https://www.google.com/maps?q={MAP_Q}&hl=vi&z=17&output=embed'
+MAP_DIR = f'https://www.google.com/maps/dir/?api=1&destination={MAP_Q}'
 FB = 'https://www.facebook.com/mt.autochamsocxe'
 MSG = 'https://m.me/mt.autochamsocxe'
 ZALO = f'https://zalo.me/{PHONE}'
@@ -55,6 +60,7 @@ def head(title, desc):
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap&subset=vietnamese" rel="stylesheet">
 <script>document.documentElement.classList.add('js');try{{if(sessionStorage.getItem('mt-pt')==='1')document.documentElement.classList.add('pt-arrive')}}catch(e){{}}</script>
 <link rel="stylesheet" href="assets/css/style.css">
+<script type="application/ld+json">{{"@context":"https://schema.org","@type":"AutoRepair","name":"MT Auto Care","image":"assets/logo.png","telephone":"+84823418418","email":"{EMAIL}","address":{{"@type":"PostalAddress","streetAddress":"71A Tôn Thất Tùng","addressLocality":"Phường Pleiku","addressRegion":"Gia Lai","addressCountry":"VN"}},"sameAs":["{FB}"]}}</script>
 <noscript><style>
 .loader,.cursor,.pt{{display:none!important}}
 body.is-loading{{overflow:auto!important}}
@@ -116,7 +122,7 @@ def nav(active):
 </header>
 <div class="menu" id="menu">
   <nav aria-label="Menu di động">{mlinks}</nav>
-  <div class="menu-foot mono"><a href="tel:{PHONE}">{PHONE_TXT}</a><a href="{FB}" target="_blank" rel="noopener">Facebook</a></div>
+  <div class="menu-foot mono"><a href="tel:{PHONE}">{PHONE_TXT}</a><a href="{MAP_DIR}" target="_blank" rel="noopener">71A Tôn Thất Tùng, Pleiku</a></div>
 </div>
 '''
 
@@ -130,7 +136,7 @@ def nextp(href, label):
 FOOTER = f'''
 <footer class="footer wrap">
   <div class="foot-row">
-    <div><a href="index.html" class="brand" aria-label="MT Auto Care"><img src="assets/logo.png" alt="MT Auto"><span class="brand-fallback">MT <b>AUTO</b></span></a><p style="max-width:320px;color:rgba(247,246,243,.7)">Studio chăm sóc, phục hồi và nâng cấp ô tô.</p></div>
+    <div><a href="index.html" class="brand" aria-label="MT Auto Care"><img src="assets/logo.png" alt="MT Auto"><span class="brand-fallback">MT <b>AUTO</b></span></a><p style="max-width:320px;color:rgba(247,246,243,.7)">Studio chăm sóc, phục hồi và nâng cấp ô tô.</p><p style="margin-top:14px"><a class="ulink" href="{MAP_DIR}" target="_blank" rel="noopener">{ADDRESS} ↗</a></p></div>
     <div><span class="mono">Trang</span><ul>{''.join(f'<li><a class="ulink" href="{f}">{n}</a></li>' for f, n in PAGES)}</ul></div>
     <div><span class="mono">Liên hệ</span><ul><li><a class="ulink" href="tel:{PHONE}">{PHONE_TXT}</a></li><li><a class="ulink" href="{ZALO}" target="_blank" rel="noopener">Zalo</a></li><li><a class="ulink" href="{FB}" target="_blank" rel="noopener">Facebook</a></li></ul></div>
     <div><span class="mono">Email</span><a class="ulink" href="mailto:{EMAIL}" style="word-break:break-all">{EMAIL}</a></div>
@@ -317,6 +323,7 @@ home = f'''
       <div><span class="mono">Hotline</span><a class="big ulink" href="tel:{PHONE}">{PHONE_TXT}</a></div>
     </div>
     <div class="contact-info" data-fade style="--d:.1s;grid-column:7/13">
+      <div><span class="mono">Xưởng</span><a class="big ulink" href="{MAP_DIR}" target="_blank" rel="noopener">71A Tôn Thất Tùng, Pleiku ↗</a></div>
       <div><span class="mono">Facebook</span><a class="big ulink" href="{FB}" target="_blank" rel="noopener">/mt.autochamsocxe</a></div>
     </div>
   </div>
@@ -441,6 +448,7 @@ contact = phero('Liên hệ — Contact', 'Liên hệ', 'Ghé thăm <span class=
     <a class="ccard" href="tel:{PHONE}" data-fade><span class="mono">Hotline</span><b>{PHONE_TXT}</b><span class="go">→</span></a>
     <a class="ccard" href="{ZALO}" target="_blank" rel="noopener" data-fade style="--d:.08s"><span class="mono">Zalo</span><b>Chat Zalo<br>{PHONE_TXT}</b><span class="go">→</span></a>
     <a class="ccard" href="{FB}" target="_blank" rel="noopener" data-fade style="--d:.16s"><span class="mono">Facebook</span><b>/mt.autochamsocxe</b><span class="go">→</span></a>
+    <a class="ccard wide" href="{MAP_DIR}" target="_blank" rel="noopener" data-fade><span class="mono">Địa chỉ xưởng</span><b>71A Tôn Thất Tùng,<br>Phường Pleiku, Gia Lai</b><span class="go">→</span></a>
   </div>
 </section>
 
@@ -480,15 +488,17 @@ contact = phero('Liên hệ — Contact', 'Liên hệ', 'Ghé thăm <span class=
       <span class="label" data-fade>Địa chỉ</span>
       <h2 class="h-l" data-split>Ghé xưởng.</h2>
       <dl data-fade>
-        <div><dt>Địa chỉ</dt><dd>Đang cập nhật</dd></div>
-        <div><dt>Giờ làm việc</dt><dd>Đang cập nhật — vui lòng gọi trước</dd></div>
+        <div><dt>Địa chỉ</dt><dd>{ADDRESS}<br><small class="muted" style="font-size:14px">({ADDRESS_OLD})</small></dd></div>
+        <div><dt>Giờ làm việc</dt><dd>Vui lòng gọi trước để đặt lịch</dd></div>
         <div><dt>Hotline</dt><dd><a class="ulink" href="tel:{PHONE}">{PHONE_TXT}</a></dd></div>
       </dl>
+      <div data-fade>{btn('Chỉ đường Google Maps', MAP_DIR, ' target="_blank" rel="noopener"')}</div>
     </div>
     <div class="visit-map" data-fade>
       <div class="grid-bg"></div>
-      <div><div class="pin"></div><p>Bản đồ chỉ đường sẽ hiển thị tại đây khi có địa chỉ chính thức của xưởng.</p></div>
-      <!-- Khi có địa chỉ: thay khối này bằng <iframe src="https://www.google.com/maps?q=ĐỊA+CHỈ&output=embed" loading="lazy"></iframe> -->
+      <div><div class="pin"></div><p>{ADDRESS}</p></div>
+      <iframe src="{MAP_EMBED}" title="Bản đồ MT Auto — {ADDRESS}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+      <a class="map-dir mono" href="{MAP_DIR}" target="_blank" rel="noopener">Mở Google Maps ↗</a>
     </div>
   </div>
 </section>'''
