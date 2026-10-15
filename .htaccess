@@ -7,6 +7,16 @@ Options -Indexes
 # Friendly 404: send unknown addresses (e.g. old WordPress links) to the home page
 ErrorDocument 404 /index.html
 
+# ---- HTTPS + single hostname (https://mtautocare.com) ----
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  # let AutoSSL renew certificates over plain http
+  RewriteCond %{REQUEST_URI} !^/\.well-known/
+  RewriteCond %{HTTPS} off [OR]
+  RewriteCond %{HTTP_HOST} ^www\. [NC]
+  RewriteRule ^ https://mtautocare.com%{REQUEST_URI} [R=301,L]
+</IfModule>
+
 # ---- Security ----
 # Old WordPress copy and any leftover WP paths: never reachable from the web
 RedirectMatch 403 ^/wordpress-cu(/.*)?$
@@ -22,6 +32,8 @@ RedirectMatch 403 /\.(?!well-known)
   Header always set X-Frame-Options "SAMEORIGIN"
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
   Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()"
+  # browsers remember to use https only (6 months)
+  Header always set Strict-Transport-Security "max-age=15552000" "expr=%{HTTPS} == 'on'"
 </IfModule>
 
 # Cache static assets in the browser
