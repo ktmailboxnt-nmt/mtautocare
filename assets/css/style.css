@@ -679,3 +679,13 @@ body.loaded [data-split-now] .wd > span{transform:none}
 .foot-mark.in{animation:mtsweep 4.2s cubic-bezier(.45,0,.25,1) 1.4s infinite}
 @keyframes mtsweep{0%{--sheen:-400px}65%,100%{--sheen:calc(var(--w) + 400px)}}
 @media (prefers-reduced-motion:reduce){.foot-mark.in{animation:mtsweep 4.2s cubic-bezier(.45,0,.25,1) 1.4s infinite!important}}
+
+/* ---------- logo: light sweep masked to the logo's own shape, looping ---------- */
+.brand{position:relative}
+.brand::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(105deg,transparent 41%,rgba(255,248,225,.72) 50%,transparent 59%) no-repeat;background-size:260% 100%;
+  -webkit-mask:url(../logo.png) center/contain no-repeat;mask:url(../logo.png) center/contain no-repeat;
+  animation:logosheen 3.8s cubic-bezier(.45,0,.25,1) 1.2s infinite}
+.brand.nologo::after{display:none}
+@keyframes logosheen{0%{background-position:160% 0}55%,100%{background-position:-60% 0}}
+@media (prefers-reduced-motion:reduce){.brand::after{animation:logosheen 3.8s cubic-bezier(.45,0,.25,1) 1.2s infinite!important}}
