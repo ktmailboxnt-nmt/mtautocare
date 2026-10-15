@@ -382,6 +382,9 @@ safe(() => {
       fm.style.fontSize = '100px';
       const ch = fm.children, w = ch[ch.length - 1].getBoundingClientRect().right - ch[0].getBoundingClientRect().left;
       fm.style.fontSize = Math.floor(Math.min(100 * fm.clientWidth / w * .985, Math.max(40, vw * .09))) + 'px';
+      // light sweep: each letter knows where it sits in the word
+      fm.style.setProperty('--w', fm.clientWidth + 'px');
+      [...ch].forEach(c => c.style.setProperty('--x', c.offsetLeft + 'px'));
     });
   }
 });
