@@ -24,6 +24,7 @@ const html = document.documentElement, body = document.body;
 let vw = innerWidth, vh = innerHeight;
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 
+const safe = fn => { try { fn(); } catch (e) { console.error('[mt]', e); } };
 const onScroll = [];   // fn(y) — runs when scroll position changes
 const onMeasure = [];  // fn()  — runs on load/resize
 const offTop = el => { const r = el.getBoundingClientRect(); return { top: r.top + scrollY, h: r.height }; };
@@ -209,7 +210,7 @@ if ('IntersectionObserver' in window && !reduced) {
 } else revealEls.forEach(el => el.classList.add('in'));
 
 /* ---------- header, progress bar, back-to-top ---------- */
-{
+safe(() => {
   const header = $('#header'), progress = $('#progress'), ring = $('#totopRing'), totop = $('#totop');
   let lastY = 0;
   if (totop) totop.addEventListener('click', () => scrollToY(0));
@@ -223,10 +224,10 @@ if ('IntersectionObserver' in window && !reduced) {
     }
     lastY = y;
   });
-}
+});
 
 /* ---------- home hero: frame shrinks into a rounded card ---------- */
-{
+safe(() => {
   const frame = $('#heroFrame'), img = $('#heroImg'), content = $('#heroContent');
   if (frame) onScroll.push(y => {
     if (y > vh * 1.2) return;
@@ -236,10 +237,10 @@ if ('IntersectionObserver' in window && !reduced) {
     if (img) img.style.transform = `translate3d(0, ${y * .25}px, 0)`;
     if (content) { content.style.transform = `translate3d(0, ${y * -.18}px, 0)`; content.style.opacity = clamp(1 - p * 1.4).toFixed(3); }
   });
-}
+});
 
 /* ---------- words that light up while reading ---------- */
-$$('[data-scrub]').forEach(el => {
+safe(() => $$('[data-scrub]').forEach(el => {
   let hot = false;  // words between *...* are highlighted
   el.innerHTML = el.textContent.trim().split(/\s+/).map(w => {
     if (w.startsWith('*')) hot = true;
@@ -254,10 +255,10 @@ $$('[data-scrub]').forEach(el => {
     const lit = Math.floor(p * words.length * 1.05);
     words.forEach((w, i) => w.classList.toggle('on', i < lit));
   });
-});
+}));
 
 /* ---------- parallax images ---------- */
-{
+safe(() => {
   const imgs = $$('img[data-speed]'); let ms = [];
   onMeasure.push(() => { ms = imgs.map(i => offTop(i.parentElement)); });
   if (imgs.length) onScroll.push(y => imgs.forEach((img, i) => {
@@ -265,10 +266,10 @@ $$('[data-scrub]').forEach(el => {
     const c = (m.top + m.h / 2 - (y + vh / 2)) / vh;
     img.style.transform = `translate3d(0, ${(c * parseFloat(img.dataset.speed) * 100).toFixed(2)}%, 0)`;
   }));
-}
+});
 
 /* ---------- stacked cards ---------- */
-{
+safe(() => {
   const cards = $$('.card'), shades = cards.map(c => $('.card-shade', c)); let tops = [];
   onMeasure.push(() => { tops = cards.map(c => parseFloat(getComputedStyle(c).top) || 0); });
   if (cards.length > 1) onScroll.push(() => {
@@ -279,10 +280,10 @@ $$('[data-scrub]').forEach(el => {
       if (shades[i]) shades[i].style.opacity = (p * .55).toFixed(3);
     }
   });
-}
+});
 
 /* ---------- zoom-through ---------- */
-{
+safe(() => {
   const zoom = $('#zoom'), st = $('#zoomStick'), pct = $('#zoomPct'); let m = { top: 0, h: 0 };
   if (zoom && st) {
     onMeasure.push(() => { m = offTop(zoom); });
@@ -300,10 +301,10 @@ $$('[data-scrub]').forEach(el => {
       if (pct) pct.textContent = String(Math.round(e * 100)).padStart(3, '0') + '%';
     });
   }
-}
+});
 
 /* ---------- process steps ---------- */
-{
+safe(() => {
   const steps = $$('.pstep'), count = $('#pcount'); let ms = [], cur = -1;
   const set = i => { if (i === cur) return; cur = i; steps.forEach((s, j) => s.classList.toggle('on', j === i)); if (count) count.style.transform = `translateY(${-i * 25}%)`; };
   if (steps.length) {
@@ -316,10 +317,10 @@ $$('[data-scrub]').forEach(el => {
       set(best);
     });
   }
-}
+});
 
 /* ---------- drifting gallery rows ---------- */
-{
+safe(() => {
   const gal = $('#gallery'), rows = $$('.grow'); let m = { top: 0, h: 0 }, widths = [];
   if (gal && rows.length) {
     onMeasure.push(() => { m = offTop(gal); widths = rows.map(r => r.scrollWidth); });
@@ -332,7 +333,7 @@ $$('[data-scrub]').forEach(el => {
       });
     });
   }
-}
+});
 
 /* ---------- faq ---------- */
 $$('.faq-q').forEach(q => q.addEventListener('click', () => {
@@ -345,7 +346,7 @@ $$('.faq-q').forEach(q => q.addEventListener('click', () => {
 /* ---------- cursor ---------- */
 const cursor = $('#cursor'), cdot = cursor && $('.cursor-dot', cursor);
 const mouse = { x: -100, y: -100 }, cpos = { x: -100, y: -100 };
-if (cursor && fine && !reduced) {
+if (cursor && fine && !reduced) safe(() => {
   html.classList.add('has-cursor');
   addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; cursor.classList.remove('off'); }, { passive: true });
   document.addEventListener('mouseleave', () => cursor.classList.add('off'));
@@ -354,9 +355,9 @@ if (cursor && fine && !reduced) {
     const view = !!(t && t.closest('[data-cursor="view"]'));
     cursor.classList.toggle('view', view);
     cursor.classList.toggle('hover', !!t && !view);
-    const lbl = $('span', cdot); if (lbl) lbl.textContent = (t && t.closest('[data-cursor-label]')?.dataset.cursorLabel) || 'Xem';
+    const lbl = $('span', cdot); if (lbl) lbl.textContent = ((t && t.closest('[data-cursor-label]')) || {dataset:{}}).dataset.cursorLabel || 'Xem';
   });
-}
+});
 
 /* ---------- ticker ---------- */
 const ticker = $('#ticker'), tg = ticker && $('.ticker-group', ticker);
@@ -364,14 +365,14 @@ let tx = 0, tw = 0, tdir = -1;
 if (ticker) { for (let i = 0; i < 3; i++) ticker.appendChild(tg.cloneNode(true)); onMeasure.push(() => { tw = tg.getBoundingClientRect().width; }); }
 
 /* ---------- clock ---------- */
-{
+safe(() => {
   const clock = $('#clock');
   const tick = () => { try { clock.textContent = 'VN ' + new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Ho_Chi_Minh' }); } catch (e) { clock.textContent = ''; } };
   if (clock) { tick(); setInterval(tick, 30000); }
-}
+});
 
 /* ---------- footer wordmark ---------- */
-{
+safe(() => {
   const fm = $('#footMark');
   if (fm) {
     fm.innerHTML = [...fm.textContent].map((c, i) => `<span aria-hidden="true" class="${i < 2 ? 'r' : i >= 3 && i <= 6 ? 'a' : ''}" style="--i:${i}">${c === ' ' ? '&nbsp;' : c}</span>`).join('');
@@ -381,10 +382,10 @@ if (ticker) { for (let i = 0; i < 3; i++) ticker.appendChild(tg.cloneNode(true))
       fm.style.fontSize = Math.floor(Math.min(100 * fm.clientWidth / w * .985, Math.max(40, vw * .09))) + 'px';
     });
   }
-}
+});
 
 /* ---------- hover index: image follows the cursor ---------- */
-{
+safe(() => {
   const idx = $('.hindex'), float = $('.hfloat');
   if (idx && float && fine && !reduced) {
     const imgs = $$('img', float); const pos = { x: 0, y: 0 }, cur = { x: 0, y: 0 }; let on = false;
@@ -401,10 +402,10 @@ if (ticker) { for (let i = 0; i < 3; i++) ticker.appendChild(tg.cloneNode(true))
     };
     loop();
   }
-}
+});
 
 /* ---------- service page: sticky nav follows the block in view ---------- */
-{
+safe(() => {
   const links = $$('.snav a'), blocks = links.map(a => $(a.getAttribute('href'))).filter(Boolean); let ms = [];
   if (blocks.length) {
     onMeasure.push(() => { ms = blocks.map(offTop); });
@@ -414,10 +415,10 @@ if (ticker) { for (let i = 0; i < 3; i++) ticker.appendChild(tg.cloneNode(true))
       links.forEach((a, i) => a.classList.toggle('on', i === best));
     });
   }
-}
+});
 
 /* ---------- works: filter + lightbox ---------- */
-{
+safe(() => {
   const works = $$('.work'), lb = $('#lb');
   $$('.filters button').forEach(b => b.addEventListener('click', () => {
     $$('.filters button').forEach(x => x.classList.toggle('on', x === b));
@@ -454,7 +455,7 @@ if (ticker) { for (let i = 0; i < 3; i++) ticker.appendChild(tg.cloneNode(true))
       if (e.key === 'Escape') close(); else if (e.key === 'ArrowLeft') show(at - 1); else if (e.key === 'ArrowRight') show(at + 1);
     });
   }
-}
+});
 
 /* ---------- before / after slider ---------- */
 $$('.ba').forEach(ba => {
@@ -473,7 +474,7 @@ $$('.ba').forEach(ba => {
 });
 
 /* ---------- videos: mobile hero loop, reel previews, full player ---------- */
-{
+safe(() => {
   const probe = document.createElement('video');
   const VEXT = probe.canPlayType('video/webm; codecs="vp9"') ? 'webm' : 'mp4';
   const vsrc = u => u.replace(/\.mp4$/, '.' + VEXT);
@@ -513,7 +514,7 @@ $$('.ba').forEach(ba => {
     vp.addEventListener('click', e => { if (e.target === vp) close(); });
     addEventListener('keydown', e => { if (e.key === 'Escape' && vp.classList.contains('open')) close(); });
   }
-}
+});
 
 /* ---------- booking form ---------- */
 function pickService() {
@@ -522,7 +523,7 @@ function pickService() {
   if (r) { r.checked = true; store.del('mt-service'); }
 }
 pickService();
-{
+safe(() => {
   const form = $('#booking-form');
   if (form) form.addEventListener('submit', e => {
     e.preventDefault();
@@ -536,7 +537,7 @@ pickService();
     location.href = `mailto:lienhe@mtautocare.com?subject=${encodeURIComponent('Đặt lịch — MT Auto Care')}&body=${encodeURIComponent(txt)}`;
     note.textContent = 'Cảm ơn bạn! Ứng dụng email đang được mở để gửi yêu cầu.'; note.style.color = '';
   });
-}
+});
 $$('[data-year]').forEach(el => { el.textContent = new Date().getFullYear(); });
 
 /* ---------- measure + main loop ---------- */
