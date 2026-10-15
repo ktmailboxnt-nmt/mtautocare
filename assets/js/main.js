@@ -468,9 +468,18 @@ $$('.ba').forEach(ba => {
 
 /* ---------- videos: mobile hero loop, reel previews, full player ---------- */
 {
-  const hv = $('.hero-video');
-  if (hv && !reduced && matchMedia('(max-width: 640px)').matches) {
-    hv.src = hv.dataset.src; hv.play().catch(() => {});
+  // phones: full-screen portrait loop; desktops: blurred backdrop + sharp portrait panel
+  const heroVids = reduced ? [] : matchMedia('(max-width: 640px)').matches ? $$('.hero-video')
+    : matchMedia('(min-width: 900px)').matches ? $$('.hero-dv video') : [];
+  heroVids.forEach(v => { v.src = v.dataset.src; v.play().catch(() => {}); });
+  if (heroVids.length) {
+    let heroPlaying = true;
+    onScroll.push(y => {
+      const show = y < vh * 1.2;
+      if (show === heroPlaying) return;
+      heroPlaying = show;
+      heroVids.forEach(v => show ? v.play().catch(() => {}) : v.pause());
+    });
   }
   const previews = $$('.reel-phone video');
   if (previews.length && 'IntersectionObserver' in window && !reduced) {

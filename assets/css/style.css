@@ -628,3 +628,18 @@ body.loaded [data-split-now] .wd > span{transform:none}
 .vp video{max-height:88vh;max-width:92vw;border-radius:16px;background:#000}
 .vp .x{position:absolute;top:20px;right:20px;width:52px;height:52px;border-radius:50%;border:1px solid rgba(255,255,255,.2);color:var(--paper);font-size:20px;display:grid;place-items:center;transition:background .3s,color .3s}
 .vp .x:hover{background:var(--accent);color:var(--ink)}
+
+/* ---------- desktop hero video: blurred backdrop + sharp portrait panel ---------- */
+.hero-dv{display:none}
+@media (min-width:900px){
+  .hero{--fgh:calc(100% - 96px - clamp(110px,16vh,150px))}
+  .hero-dv{display:block;position:absolute;inset:0}
+  .hero-img img{display:none}
+  .hdv-bg{position:absolute;inset:-60px;width:calc(100% + 120px);height:calc(100% + 120px);object-fit:cover;filter:blur(30px) brightness(.45) saturate(1.15)}
+  .hdv-fg{position:absolute;z-index:2;right:var(--pad);top:96px;height:var(--fgh);width:auto;aspect-ratio:9/16;object-fit:cover;border-radius:18px;border:1px solid rgba(255,255,255,.14);box-shadow:0 40px 90px -20px rgba(0,0,0,.7)}
+  .hero-content{padding-right:calc((100svh - 96px - clamp(110px,16vh,150px)) * 9 / 16 + var(--pad) * 2)}
+  .hero-title{font-size:clamp(56px,7.4vw,150px)}
+  .hero-title small{display:none}
+  .hero-meta{flex-direction:column;align-items:flex-start;gap:18px}
+  .hero-bar{margin-right:calc((100svh - 96px - clamp(110px,16vh,150px)) * -9 / 16 - var(--pad))}
+}
