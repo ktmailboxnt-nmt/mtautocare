@@ -25,6 +25,7 @@ let vw = innerWidth, vh = innerHeight;
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 
 const safe = fn => { try { fn(); } catch (e) { console.error('[mt]', e); } };
+let last = -1;          // last painted scroll position (used by measure + frame)
 const onScroll = [];   // fn(y) — runs when scroll position changes
 const onMeasure = [];  // fn()  — runs on load/resize
 const offTop = el => { const r = el.getBoundingClientRect(); return { top: r.top + scrollY, h: r.height }; };
@@ -479,7 +480,7 @@ safe(() => {
   const VEXT = probe.canPlayType('video/webm; codecs="vp9"') ? 'webm' : 'mp4';
   const vsrc = u => u.replace(/\.mp4$/, '.' + VEXT);
   // phones: full-screen portrait loop; desktops: blurred backdrop + sharp portrait panel
-  const heroVids = reduced ? [] : matchMedia('(max-width: 640px)').matches ? $$('.hero-video')
+  const heroVids = matchMedia('(max-width: 640px)').matches ? $$('.hero-video')
     : matchMedia('(min-width: 900px)').matches ? $$('.hero-dv video') : [];
   heroVids.forEach(v => { v.src = vsrc(v.dataset.src); v.play().catch(() => {}); });
   if (heroVids.length) {
@@ -492,7 +493,7 @@ safe(() => {
     });
   }
   const previews = $$('.reel-phone video');
-  if (previews.length && 'IntersectionObserver' in window && !reduced) {
+  if (previews.length && 'IntersectionObserver' in window) {
     const vio = new IntersectionObserver(es => es.forEach(en => {
       const v = en.target;
       if (en.isIntersecting) { if (!v.getAttribute('src')) v.src = vsrc(v.dataset.src); v.play().catch(() => {}); }
@@ -541,7 +542,6 @@ safe(() => {
 $$('[data-year]').forEach(el => { el.textContent = new Date().getFullYear(); });
 
 /* ---------- measure + main loop ---------- */
-let last = -1;
 function measure() { vw = innerWidth; vh = innerHeight; onMeasure.forEach(f => f()); last = -1; }
 let prev = performance.now(), lastFrameY = 0;
 function frame(now) {
