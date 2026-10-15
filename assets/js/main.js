@@ -196,7 +196,8 @@ document.addEventListener('click', e => {
 
 /* ---------- reveals ---------- */
 const revealEls = $$('[data-split]:not([data-split-now]),[data-fade],[data-img],#footMark');
-if ('IntersectionObserver' in window && !reduced) {
+// reduced motion still gets reveals — CSS turns them into plain fades
+if ('IntersectionObserver' in window) {
   const map = new Map();
   const io = new IntersectionObserver(es => es.forEach(en => {
     if (!en.isIntersecting) return;
