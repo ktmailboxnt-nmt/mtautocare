@@ -643,3 +643,20 @@ body.loaded [data-split-now] .wd > span{transform:none}
   .hero-meta{flex-direction:column;align-items:flex-start;gap:18px}
   .hero-bar{margin-right:calc((100svh - 96px - clamp(110px,16vh,150px)) * -9 / 16 - var(--pad))}
 }
+
+/* ---------- intro statement ---------- */
+.intro-text{font-size:clamp(30px,3.9vw,64px);line-height:1.14;letter-spacing:-.04em;font-weight:300;max-width:20ch;max-width:min(100%,1050px)}
+.intro-text .w.hot{font-weight:500;color:rgba(14,14,13,.16)}
+.intro-text .w.hot.on{color:var(--ink);background:linear-gradient(transparent 62%,rgba(242,165,22,.55) 62%,rgba(242,165,22,.55) 92%,transparent 92%)}
+
+/* ---------- footer wordmark in the logo's colours, with a reveal ---------- */
+:root{--logo-red:#e3202a}
+.foot-mark{overflow:hidden}
+.foot-mark span{transform:translateY(105%) rotate(6deg);opacity:0;filter:blur(6px);transform-origin:left bottom;
+  transition:transform 1.3s var(--ease),opacity .9s var(--ease),filter 1.1s var(--ease);transition-delay:calc(var(--i) * 60ms)}
+.foot-mark.in span{transform:none;opacity:1;filter:none}
+.foot-mark .r{color:var(--logo-red)}
+.foot-mark .a{color:var(--accent);background:linear-gradient(100deg,#f7c64a 0%,#f2a516 45%,#fff2c4 50%,#f2a516 55%,#e08a0a 100%);background-size:250% 100%;background-position:100% 0;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.foot-mark.in .a{animation:goldsheen 2.6s var(--ease) 1.1s both}
+@keyframes goldsheen{from{background-position:100% 0}to{background-position:0 0}}
+@media (prefers-reduced-motion:reduce){.foot-mark span{opacity:1!important;filter:none!important}}

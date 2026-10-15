@@ -1,5 +1,5 @@
 """Generate the four MT Auto Care pages with shared head, header and footer."""
-import sys, os
+import sys, os, hashlib
 
 OUT = sys.argv[1] if len(sys.argv) > 1 else os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
 
@@ -34,6 +34,10 @@ PAGES = [
     ('lien-he.html', 'Liên hệ'),
 ]
 
+def ver(rel):
+    """Content hash, so browsers fetch css/js again after every change."""
+    return hashlib.md5(open(os.path.join(OUT, rel), 'rb').read()).hexdigest()[:8]
+
 def head(title, desc, fname):
     url = SITE_URL + ('' if fname == 'index.html' else fname)
     return f'''<!doctype html>
@@ -62,7 +66,7 @@ def head(title, desc, fname):
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap&subset=vietnamese" rel="stylesheet">
 <script>document.documentElement.classList.add('js');try{{if(sessionStorage.getItem('mt-pt')==='1')document.documentElement.classList.add('pt-arrive')}}catch(e){{}}</script>
-<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/style.css?v={ver('assets/css/style.css')}">
 <script type="application/ld+json">{{"@context":"https://schema.org","@type":"AutoRepair","name":"MT Auto Care","image":"{SITE_URL}assets/og.jpg","url":"{SITE_URL}","telephone":"+84823418418","email":"{EMAIL}","address":{{"@type":"PostalAddress","streetAddress":"71A Tôn Thất Tùng","addressLocality":"Phường Pleiku","addressRegion":"Gia Lai","addressCountry":"VN"}},"geo":{{"@type":"GeoCoordinates","latitude":{LAT},"longitude":{LNG}}},"hasMap":"{MAP_DIR}","sameAs":["{FB}"]}}</script>
 <noscript><style>
 .loader,.cursor,.pt{{display:none!important}}
@@ -92,7 +96,7 @@ def nav(active):
 
 <!-- LOADER -->
 <div class="loader" id="loader" aria-hidden="true">
-  <div class="loader-top mono"><span>Trung tâm chăm sóc xe ô tô</span><span>Độ đèn · Màn hình · Phanh – mâm · Chăm sóc</span></div>
+  <div class="loader-top mono"><span>Trung tâm chăm sóc xe ô tô</span><span>Độ đèn · Màn hình · Phanh – mâm – body · Chăm sóc</span></div>
   <div class="loader-center"><span class="brand loader-logo"><img src="assets/logo.png" alt=""><span class="brand-fallback">MT <b>AUTO</b></span></span></div>
   <div class="loader-bottom">
     <div class="loader-num"><span><span id="loaderNum">0</span><sup>%</sup></span></div>
@@ -147,7 +151,7 @@ FOOTER = f'''
   <div class="foot-mark" id="footMark" aria-label="MT Auto Care">MT AUTOCARE</div>
   <div class="foot-bottom mono"><span>© <span data-year>2026</span> MT Auto Care</span><span>Made with precision</span></div>
 </footer>
-<script src="assets/js/main.js"></script>
+<script src="assets/js/main.js?v={ver('assets/js/main.js')}"></script>
 </body>
 </html>
 '''
@@ -207,14 +211,14 @@ SERVICES = [
     ('man-hinh', '02', 'Multimedia', 'Màn hình, Android box &amp; âm thanh', 'Màn hình &amp; âm thanh',
      'Biến khoang lái thành trung tâm giải trí thông minh: Android box, màn hình lớn, camera hành trình và âm thanh — lắp gọn gàng, đúng xe.',
      ['Android box HTD D14 Ultra', 'Màn hình Gotech, iCar Elliview, Zestech', 'Loa sub Steelmate', 'Camera hành trình 70mai'], 'man-d14', 'man-zestech'),
-    ('phanh-mam', '03', 'Performance', 'Phanh, mâm &amp; bảo vệ gầm', 'Phanh, mâm &amp; gầm',
-     'Heo phanh hiệu năng cao, mâm thể thao và tấm ốp bảo vệ gầm — đẹp hơn, an toàn hơn và bền bỉ hơn trên mọi cung đường.',
-     ['Heo phanh Brembo, AMG', 'Mâm thể thao, ốc mâm Rays', 'Ốp bảo vệ gầm B-F', 'Lắp đặt, cân chỉnh chuẩn kỹ thuật'], 'phanh-brembo', 'mam-do'),
+    ('phanh-mam', '03', 'Performance', 'Phanh, mâm, gầm &amp; body', 'Phanh, mâm, gầm &amp; body',
+     'Heo phanh hiệu năng cao, mâm thể thao, ốp bảo vệ gầm và body kit — xe đẹp hơn, thể thao hơn, an toàn và bền bỉ hơn trên mọi cung đường.',
+     ['Heo phanh Brembo, AMG', 'Mâm thể thao, ốc mâm Rays', 'Body kit, nâng cấp ngoại thất', 'Ốp bảo vệ gầm B-F'], 'phanh-brembo', 'mam-do'),
     ('cham-soc', '04', 'Care', 'Chăm sóc &amp; nội thất', 'Chăm sóc &amp; nội thất',
      'Chăm sóc định kỳ và làm mới khoang lái: phủ kính, thay dầu, gạt mưa, vô lăng carbon, bọc da — để xe luôn sạch đẹp và dễ chịu.',
      ['Phủ kính Meguiar’s, gạt mưa Bosch', 'Thay dầu nhớt, vệ sinh khoang máy', 'Vô lăng carbon', 'Bọc da, bọc nỉ nội thất'], 'vo-lang-carbon', 'cs-phu-kinh'),
 ]
-CARD_TITLES = ['Độ đèn &amp;<br>ánh sáng', 'Màn hình &amp;<br>âm thanh', 'Phanh, mâm<br>&amp; gầm', 'Chăm sóc<br>&amp; nội thất']
+CARD_TITLES = ['Độ đèn &amp;<br>ánh sáng', 'Màn hình &amp;<br>âm thanh', 'Phanh, mâm,<br>gầm &amp; body', 'Chăm sóc<br>&amp; nội thất']
 plain = lambda t: t.replace('&amp;', '&')
 
 REELS = [
@@ -295,10 +299,10 @@ home = f'''
   <div class="hero-content" id="heroContent">
     <div class="hero-meta">
       <span class="label hero-up" style="--d:1.05s">MT Auto — Nâng niu xế yêu</span>
-      <p class="hero-up" style="--d:1.2s">Trung tâm chăm sóc và nâng cấp ô tô tại Pleiku: độ đèn, màn hình, phanh, mâm và chăm sóc xe — làm tỉ mỉ, tư vấn đúng nhu cầu.</p>
+      <p class="hero-up" style="--d:1.2s">Trung tâm chăm sóc và nâng cấp ô tô tại Pleiku: độ đèn, màn hình, phanh, mâm, body kit và chăm sóc xe — làm tỉ mỉ, tư vấn đúng nhu cầu.</p>
     </div>
     <h1 class="hero-title" data-split-now>
-      <span class="row"><span>Chăm chút</span><small>(01) Độ đèn<br>(02) Màn hình<br>(03) Phanh – mâm<br>(04) Chăm sóc</small></span>
+      <span class="row"><span>Chăm chút</span><small>(01) Độ đèn<br>(02) Màn hình<br>(03) Phanh – mâm – body<br>(04) Chăm sóc</small></span>
       <span class="row"><span>từng <span class="accent">chi tiết.</span></span></span>
     </h1>
     <div class="hero-bar mono hero-up" style="--d:1.4s">
@@ -311,14 +315,14 @@ home = f'''
 
 <div class="ticker" aria-hidden="true">
   <div class="ticker-track" id="ticker">
-    <div class="ticker-group"><span>Độ đèn bi LED</span><b>✦</b><span>Màn hình Android</span><b>✦</b><span>Phanh Brembo</span><b>✦</b><span>Mâm thể thao</span><b>✦</b><span>Ốp gầm</span><b>✦</b><span>Phủ kính</span><b>✦</b><span>Vô lăng carbon</span><b>✦</b><span>Âm thanh</span><b>✦</b></div>
+    <div class="ticker-group"><span>Độ đèn bi LED</span><b>✦</b><span>Màn hình Android</span><b>✦</b><span>Phanh Brembo</span><b>✦</b><span>Mâm thể thao</span><b>✦</b><span>Ốp gầm</span><b>✦</b><span>Body kit</span><b>✦</b><span>Phủ kính</span><b>✦</b><span>Vô lăng carbon</span><b>✦</b><span>Âm thanh</span><b>✦</b></div>
   </div>
 </div>
 
 <section class="sec wrap" id="about">
   <div class="sec-head">
     <span class="label" data-fade>(01) Về MT Auto</span>
-    <p class="intro-text" data-scrub>MT Auto là trung tâm chăm sóc và nâng cấp ô tô tại Pleiku. Từ bộ bi LED, màn hình Android đến heo phanh Brembo — mỗi món đồ chơi đều được tư vấn đúng nhu cầu và lắp đặt chỉn chu, để bạn thêm yêu chiếc xe của mình.</p>
+    <p class="intro-text" data-scrub>MT Auto là nơi chăm sóc ô tô dành cho những người *coi trọng chi tiết.* Chúng tôi làm việc *chậm rãi, chính xác và minh bạch* — vì một chiếc xe đẹp không đến từ sự vội vàng.</p>
   </div>
   <div class="intro-grid">
     <div class="intro-a">
@@ -398,7 +402,7 @@ home = f'''
   </div>
 </section>''' + VPLAYER
 page('index.html', 'MT Auto — Trung tâm chăm sóc & nâng cấp ô tô tại Pleiku',
-     'MT Auto: độ đèn bi LED, màn hình Android, phanh Brembo, mâm, ốp gầm và chăm sóc xe tại 71A Tôn Thất Tùng, Pleiku. Hotline 0823 418 418.',
+     'MT Auto: độ đèn bi LED, màn hình Android, phanh Brembo, mâm, ốp gầm, body kit và chăm sóc xe tại 71A Tôn Thất Tùng, Pleiku. Hotline 0823 418 418.',
      home, nextp('dich-vu.html', 'Dịch vụ'))
 
 # ----------------------------------------------------------------- SERVICES
@@ -452,7 +456,7 @@ services = phero('Dịch vụ — Services', 'Dịch vụ', 'Dịch vụ <span c
   </div>
 </section>'''
 page('dich-vu.html', 'Dịch vụ — MT Auto Pleiku',
-     'Độ đèn bi LED, màn hình Android & âm thanh, phanh – mâm – ốp gầm, chăm sóc & nội thất ô tô tại MT Auto Pleiku.',
+     'Độ đèn bi LED, màn hình Android & âm thanh, phanh – mâm – ốp gầm – body kit, chăm sóc & nội thất ô tô tại MT Auto Pleiku.',
      services, nextp('cong-trinh.html', 'Công trình'))
 
 # ----------------------------------------------------------------- WORKS
@@ -512,7 +516,7 @@ works_page = phero('Công trình — Works', 'Công trình', 'Công trình <span
   <button class="next" aria-label="Ảnh sau">→</button>
 </div>''' + VPLAYER
 page('cong-trinh.html', 'Công trình — MT Auto Pleiku',
-     'Hình ảnh và video thực tế các công trình độ đèn, màn hình, phanh, mâm và chăm sóc xe tại MT Auto Pleiku.',
+     'Hình ảnh và video thực tế các công trình độ đèn, màn hình, phanh, mâm, body kit và chăm sóc xe tại MT Auto Pleiku.',
      works_page, nextp('lien-he.html', 'Liên hệ'))
 
 # ----------------------------------------------------------------- CONTACT

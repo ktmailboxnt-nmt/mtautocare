@@ -36,7 +36,7 @@ d.text((x - 4, 150), 'Chăm chút', font=f, fill=PAPER)
 w1 = d.textlength('từng ', font=f)
 d.text((x - 4, 255), 'từng ', font=f, fill=PAPER)
 d.text((x - 4 + w1, 255), 'chi tiết.', font=f, fill=AMBER)
-d.text((x, 395), 'Độ đèn · Màn hình · Phanh – mâm · Chăm sóc', font=text(30), fill=PAPER)
+d.text((x, 395), 'Độ đèn · Màn hình · Phanh, mâm, body · Chăm sóc', font=text(30), fill=PAPER)
 
 d.line([(x, 500), (W - 72, 500)], fill=(60, 60, 56), width=1)
 small = text(24)

@@ -240,7 +240,13 @@ if ('IntersectionObserver' in window && !reduced) {
 
 /* ---------- words that light up while reading ---------- */
 $$('[data-scrub]').forEach(el => {
-  el.innerHTML = el.textContent.trim().split(/\s+/).map(w => `<span class="w">${w}</span>`).join(' ');
+  let hot = false;  // words between *...* are highlighted
+  el.innerHTML = el.textContent.trim().split(/\s+/).map(w => {
+    if (w.startsWith('*')) hot = true;
+    const html = `<span class="w${hot ? ' hot' : ''}">${w.replace(/\*/g, '')}</span>`;
+    if (/\*[.,]?$/.test(w)) hot = false;
+    return html;
+  }).join(' ');
   const words = $$('.w', el); let m = { top: 0, h: 0 };
   onMeasure.push(() => { m = offTop(el); });
   onScroll.push(y => {
@@ -368,7 +374,7 @@ if (ticker) { for (let i = 0; i < 3; i++) ticker.appendChild(tg.cloneNode(true))
 {
   const fm = $('#footMark');
   if (fm) {
-    fm.innerHTML = [...fm.textContent].map((c, i) => `<span aria-hidden="true" class="${i >= 3 && i <= 6 ? 'a' : ''}" style="--i:${i}">${c === ' ' ? '&nbsp;' : c}</span>`).join('');
+    fm.innerHTML = [...fm.textContent].map((c, i) => `<span aria-hidden="true" class="${i < 2 ? 'r' : i >= 3 && i <= 6 ? 'a' : ''}" style="--i:${i}">${c === ' ' ? '&nbsp;' : c}</span>`).join('');
     onMeasure.push(() => {
       fm.style.fontSize = '100px';
       const ch = fm.children, w = ch[ch.length - 1].getBoundingClientRect().right - ch[0].getBoundingClientRect().left;
@@ -468,10 +474,13 @@ $$('.ba').forEach(ba => {
 
 /* ---------- videos: mobile hero loop, reel previews, full player ---------- */
 {
+  const probe = document.createElement('video');
+  const VEXT = probe.canPlayType('video/webm; codecs="vp9"') ? 'webm' : 'mp4';
+  const vsrc = u => u.replace(/\.mp4$/, '.' + VEXT);
   // phones: full-screen portrait loop; desktops: blurred backdrop + sharp portrait panel
   const heroVids = reduced ? [] : matchMedia('(max-width: 640px)').matches ? $$('.hero-video')
     : matchMedia('(min-width: 900px)').matches ? $$('.hero-dv video') : [];
-  heroVids.forEach(v => { v.src = v.dataset.src; v.play().catch(() => {}); });
+  heroVids.forEach(v => { v.src = vsrc(v.dataset.src); v.play().catch(() => {}); });
   if (heroVids.length) {
     let heroPlaying = true;
     onScroll.push(y => {
@@ -485,7 +494,7 @@ $$('.ba').forEach(ba => {
   if (previews.length && 'IntersectionObserver' in window && !reduced) {
     const vio = new IntersectionObserver(es => es.forEach(en => {
       const v = en.target;
-      if (en.isIntersecting) { if (!v.src) v.src = v.dataset.src; v.play().catch(() => {}); }
+      if (en.isIntersecting) { if (!v.getAttribute('src')) v.src = vsrc(v.dataset.src); v.play().catch(() => {}); }
       else v.pause();
     }), { threshold: .35 });
     previews.forEach(v => vio.observe(v));
@@ -495,7 +504,7 @@ $$('.ba').forEach(ba => {
     const pv = $('video', vp);
     const close = () => { vp.classList.remove('open'); pv.pause(); body.style.overflow = ''; };
     $$('.reel-phone').forEach(b => b.addEventListener('click', () => {
-      pv.src = b.dataset.full; pv.poster = $('video', b).poster;
+      pv.src = vsrc(b.dataset.full); pv.poster = $('video', b).poster;
       vp.classList.add('open'); body.style.overflow = 'hidden';
       pv.play().catch(() => {});
       $('.x', vp).focus();
