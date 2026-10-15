@@ -3,21 +3,10 @@ import sys, os
 
 OUT = sys.argv[1] if len(sys.argv) > 1 else os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
 
-def u(pid, w=1400):
-    return f"https://images.unsplash.com/{pid}?auto=format&fit=crop&w={w}&q=82"
-
-HERO = 'photo-1503376780353-7e6692767b70'
-RED = 'photo-1552519507-da3b142c6e3d'
-DETAIL = 'photo-1507136566006-cfc505b114fc'
-WASH = 'photo-1492144534655-ae79c964c9d7'
-INTERIOR = 'photo-1489824904134-891ab64532f1'
-PORSCHE = 'photo-1544636331-e26879cd4d9b'
-MUSTANG = 'photo-1494976388531-d1058494cdd8'
-ORANGE = 'photo-1583121274602-3e2820c69888'
-
-def img(pid, w, alt, extra='', fallback=None):
-    fb = f' data-fallback="{u(fallback, w)}"' if fallback else ''
-    return f'<img loading="lazy" src="{u(pid, w)}" alt="{alt}"{fb}{extra}>'
+def im(name, alt, extra='', lazy=True):
+    """A real photo from assets/img (exported from the shop's Facebook photos)."""
+    ld = ' loading="lazy"' if lazy else ''
+    return f'<img{ld} src="assets/img/{name}.jpg" alt="{alt}"{extra}>'
 
 PHONE = '0823418418'
 PHONE_TXT = '0823 418 418'
@@ -71,7 +60,6 @@ def head(title, desc, fname):
 <link rel="icon" href="assets/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preconnect" href="https://images.unsplash.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap&subset=vietnamese" rel="stylesheet">
 <script>document.documentElement.classList.add('js');try{{if(sessionStorage.getItem('mt-pt')==='1')document.documentElement.classList.add('pt-arrive')}}catch(e){{}}</script>
 <link rel="stylesheet" href="assets/css/style.css">
@@ -104,7 +92,7 @@ def nav(active):
 
 <!-- LOADER -->
 <div class="loader" id="loader" aria-hidden="true">
-  <div class="loader-top mono"><span>Car Care Studio</span><span>Chăm sóc · Phục hồi · Nâng cấp</span></div>
+  <div class="loader-top mono"><span>Trung tâm chăm sóc xe ô tô</span><span>Độ đèn · Màn hình · Phanh – mâm · Chăm sóc</span></div>
   <div class="loader-center"><span class="brand loader-logo"><img src="assets/logo.png" alt=""><span class="brand-fallback">MT <b>AUTO</b></span></span></div>
   <div class="loader-bottom">
     <div class="loader-num"><span><span id="loaderNum">0</span><sup>%</sup></span></div>
@@ -151,7 +139,7 @@ def nextp(href, label):
 FOOTER = f'''
 <footer class="footer wrap">
   <div class="foot-row">
-    <div><a href="index.html" class="brand" aria-label="MT Auto Care"><img src="assets/logo.png" alt="MT Auto"><span class="brand-fallback">MT <b>AUTO</b></span></a><p style="max-width:320px;color:rgba(247,246,243,.7)">Studio chăm sóc, phục hồi và nâng cấp ô tô.</p><p style="margin-top:14px"><a class="ulink" href="{MAP_DIR}" target="_blank" rel="noopener">{ADDRESS} ↗</a></p></div>
+    <div><a href="index.html" class="brand" aria-label="MT Auto Care"><img src="assets/logo.png" alt="MT Auto"><span class="brand-fallback">MT <b>AUTO</b></span></a><p style="max-width:320px;color:rgba(247,246,243,.7)">Trung tâm chăm sóc &amp; nâng cấp ô tô tại Pleiku — Nâng niu xế yêu.</p><p style="margin-top:14px"><a class="ulink" href="{MAP_DIR}" target="_blank" rel="noopener">{ADDRESS} ↗</a></p></div>
     <div><span class="mono">Trang</span><ul>{''.join(f'<li><a class="ulink" href="{f}">{n}</a></li>' for f, n in PAGES)}</ul></div>
     <div><span class="mono">Liên hệ</span><ul><li><a class="ulink" href="tel:{PHONE}">{PHONE_TXT}</a></li><li><a class="ulink" href="{ZALO}" target="_blank" rel="noopener">Zalo</a></li><li><a class="ulink" href="{FB}" target="_blank" rel="noopener">Facebook</a></li></ul></div>
     <div><span class="mono">Email</span><a class="ulink" href="mailto:{EMAIL}" style="word-break:break-all">{EMAIL}</a></div>
@@ -180,7 +168,7 @@ def visit(anchor):
       <h2 class="h-l" data-split>Ghé xưởng.</h2>
       <dl data-fade>
         <div><dt>Địa chỉ</dt><dd>{ADDRESS}<br><small class="muted" style="font-size:14px">({ADDRESS_OLD})</small></dd></div>
-        <div><dt>Giờ làm việc</dt><dd>Vui lòng gọi trước để đặt lịch</dd></div>
+        <div><dt>Giờ làm việc</dt><dd>7:15 – 18:00<br><small class="muted" style="font-size:14px">Nên gọi trước để được sắp lịch</small></dd></div>
         <div><dt>Hotline</dt><dd><a class="ulink" href="tel:{PHONE}">{PHONE_TXT}</a></dd></div>
       </dl>
       <div data-fade>{btn('Chỉ đường Google Maps', MAP_DIR, ' target="_blank" rel="noopener"')}</div>
@@ -194,10 +182,11 @@ def visit(anchor):
   </div>
 </section>'''
 
+
 def phero(label, crumb, h1, lead, media=None):
     m = ''
     if media:
-        m = f'<div class="phero-media" data-img style="--d:.35s"><img src="{u(media[0], 2000)}" alt="{media[1]}" data-speed="0.12" data-preload></div>'
+        m = f'<div class="phero-media" data-img style="--d:.35s"><img src="assets/img/{media[0]}.jpg" alt="{media[1]}" style="object-position:{media[2] if len(media) > 2 else 'center'}" data-speed="0.12" data-preload></div>'
     return f'''
 <section class="phero">
   <div class="phero-top">
@@ -209,51 +198,103 @@ def phero(label, crumb, h1, lead, media=None):
   {m}
 </section>'''
 
+# Real service groups, taken from the work the shop posts on Facebook.
+# (id, number, english tag, title, short name, description, items, card photo, detail photo)
 SERVICES = [
-    ('cham-soc', '01', 'Detailing', 'Chăm sóc &amp; làm đẹp ô tô', 'Chăm sóc &amp; làm đẹp',
-     'Làm sạch chuyên sâu, hiệu chỉnh và bảo vệ bề mặt — trả lại độ trong, độ bóng và cảm giác mới cho chiếc xe.',
-     ['Vệ sinh chi tiết nội ngoại thất', 'Hiệu chỉnh &amp; đánh bóng sơn', 'Phủ bảo vệ bề mặt sơn', 'Vệ sinh khoang máy'], WASH),
-    ('phuc-hoi', '02', 'Restoration', 'Phục hồi nội &amp; ngoại thất', 'Phục hồi nội ngoại thất',
-     'Khôi phục những chi tiết đã xuống cấp theo thời gian, giữ trọn tinh thần nguyên bản của chiếc xe.',
-     ['Phục hồi nội thất da', 'Phục hồi đèn pha, chi tiết nhựa', 'Xử lý vết xước, ố mốc', 'Làm mới khoang máy'], DETAIL),
-    ('nang-cap', '03', 'Upgrades', 'Nâng cấp tiện nghi ô tô', 'Nâng cấp tiện nghi',
-     'Những nâng cấp tinh tế, đúng nhu cầu sử dụng — tăng sự thoải mái mà vẫn hài hòa với thiết kế của xe.',
-     ['Tiện nghi nội thất', 'Hệ thống âm thanh', 'Phụ kiện theo yêu cầu', 'Tư vấn cấu hình phù hợp'], INTERIOR),
+    ('do-den', '01', 'Lighting', 'Độ đèn &amp; ánh sáng', 'Độ đèn',
+     'Nâng cấp bi LED, đèn gầm và bóng LED chính hãng — tăng sáng rõ rệt, chuẩn đường cắt, an toàn hơn khi đi đêm và đường đèo.',
+     ['Bi LED X-Light V12, V20, F10', 'Bi LED Steelmate C3-Pro', 'Đèn gầm, đèn sương mù', 'Tháo lắp, căn chỉnh chuẩn kỹ thuật'], 'den-c3pro', 'den-gam'),
+    ('man-hinh', '02', 'Multimedia', 'Màn hình, Android box &amp; âm thanh', 'Màn hình &amp; âm thanh',
+     'Biến khoang lái thành trung tâm giải trí thông minh: Android box, màn hình lớn, camera hành trình và âm thanh — lắp gọn gàng, đúng xe.',
+     ['Android box HTD D14 Ultra', 'Màn hình Gotech, iCar Elliview, Zestech', 'Loa sub Steelmate', 'Camera hành trình 70mai'], 'man-d14', 'man-zestech'),
+    ('phanh-mam', '03', 'Performance', 'Phanh, mâm &amp; bảo vệ gầm', 'Phanh, mâm &amp; gầm',
+     'Heo phanh hiệu năng cao, mâm thể thao và tấm ốp bảo vệ gầm — đẹp hơn, an toàn hơn và bền bỉ hơn trên mọi cung đường.',
+     ['Heo phanh Brembo, AMG', 'Mâm thể thao, ốc mâm Rays', 'Ốp bảo vệ gầm B-F', 'Lắp đặt, cân chỉnh chuẩn kỹ thuật'], 'phanh-brembo', 'mam-do'),
+    ('cham-soc', '04', 'Care', 'Chăm sóc &amp; nội thất', 'Chăm sóc &amp; nội thất',
+     'Chăm sóc định kỳ và làm mới khoang lái: phủ kính, thay dầu, gạt mưa, vô lăng carbon, bọc da — để xe luôn sạch đẹp và dễ chịu.',
+     ['Phủ kính Meguiar’s, gạt mưa Bosch', 'Thay dầu nhớt, vệ sinh khoang máy', 'Vô lăng carbon', 'Bọc da, bọc nỉ nội thất'], 'vo-lang-carbon', 'cs-phu-kinh'),
 ]
+CARD_TITLES = ['Độ đèn &amp;<br>ánh sáng', 'Màn hình &amp;<br>âm thanh', 'Phanh, mâm<br>&amp; gầm', 'Chăm sóc<br>&amp; nội thất']
+plain = lambda t: t.replace('&amp;', '&')
+
+REELS = [
+    ('reel1', 'Nâng cấp màn hình Android', 'Mazda'),
+    ('reel2', 'Lắp màn hình &amp; âm thanh', 'Hyundai'),
+    ('reel3', 'Một ngày ở xưởng MT Auto', 'Pleiku'),
+]
+
+def reels(label):
+    items = ''.join(f'''
+    <figure class="reel" data-fade style="--d:{i * .08:.2f}s">
+      <button class="reel-phone" data-full="assets/video/{rid}.mp4" data-cursor="view" data-cursor-label="Xem" aria-label="Xem video: {plain(t)}">
+        <video muted loop playsinline preload="none" poster="assets/video/{rid}.jpg" data-src="assets/video/{rid}-loop.mp4"></video>
+        <span class="reel-play" aria-hidden="true">▶</span>
+      </button>
+      <figcaption><b>{t}</b><span class="mono">{car}</span></figcaption>
+    </figure>''' for i, (rid, t, car) in enumerate(REELS))
+    return f'''
+<section class="sec wrap reels-sec" id="video">
+  <div class="sec-head">
+    <span class="label" data-fade>{label}</span>
+    <div>
+      <h2 class="h-l" data-split>Thực tế tại xưởng.</h2>
+      <p class="muted" data-fade style="margin-top:18px;max-width:440px">Bấm vào video để xem đầy đủ, có âm thanh.</p>
+    </div>
+  </div>
+  <div class="reels">{items}
+  </div>
+</section>'''
+
+VPLAYER = '''
+<div class="vp" id="vp" role="dialog" aria-modal="true" aria-label="Xem video">
+  <video controls playsinline preload="none"></video>
+  <button class="x" aria-label="Đóng">✕</button>
+</div>'''
 
 # ----------------------------------------------------------------- HOME
 cards = ''
-for i, (sid, num, en, title, svc, desc, items, pid) in enumerate(SERVICES):
-    t2 = ['Chăm sóc &amp;<br>làm đẹp ô tô', 'Phục hồi<br>nội &amp; ngoại thất', 'Nâng cấp<br>tiện nghi ô tô'][i]
+for i, (sid, num, en, title, svc, desc, items, pic, _) in enumerate(SERVICES):
     cards += f'''
     <article class="card" style="--i:{i}">
       <div class="card-in">
         <div class="card-body">
           <div class="card-top"><span class="card-num">{num}<sup>●</sup></span><span class="mono" style="opacity:.6">{en}</span></div>
           <div>
-            <h3>{t2}</h3>
+            <h3>{CARD_TITLES[i]}</h3>
             <p>{desc}</p>
             <ul class="card-list">{''.join(f'<li><span>{it}</span><span>0{k+1}</span></li>' for k, it in enumerate(items[:3]))}</ul>
             {btn('Xem chi tiết', f'dich-vu.html#{sid}')}
           </div>
         </div>
-        <div class="card-media" data-cursor="view">{img(pid, 1500, title.replace('&amp;', 'và'))}</div>
+        <div class="card-media" data-cursor="view">{im(pic, plain(title))}</div>
       </div>
       <div class="card-shade"></div>
     </article>'''
 
+GALLERY = [
+    [('den-steelmate', 't', 'Bi LED Steelmate'), ('phanh-amg', 'w', 'Heo phanh AMG'), ('man-d14-mazda', 't', 'D14 Ultra — Mazda'),
+     ('gam-vinfast', 'w', 'Ốp gầm B-F — VinFast'), ('vo-lang-kia', 't', 'Khoang lái sau nâng cấp')],
+    [('mam-do', 't', 'Mâm &amp; heo Brembo'), ('cs-meguiars', 'w', 'Phủ kính Meguiar’s'), ('loa-steelmate', 't', 'Loa sub Steelmate'),
+     ('xlight-cover', 'w', 'Độ bi X-Light V20'), ('noi-that-da', 't', 'Bọc da bệ tì tay')],
+]
+rows = ''.join('\n  <div class="grow">' + ''.join(
+    f'\n    <figure class="{c}">{im(n, plain(t))}<figcaption>{t}</figcaption></figure>' for n, c, t in row) + '\n  </div>' for row in GALLERY)
+
 home = f'''
 <section class="hero" id="hero">
   <div class="hero-frame" id="heroFrame">
-    <div class="hero-img" id="heroImg"><img src="{u(HERO, 2200)}" alt="Xe thể thao trên đường" fetchpriority="high" data-preload></div>
+    <div class="hero-img" id="heroImg">
+      {im('hero', 'Ford Everest tại xưởng MT Auto', ' fetchpriority="high" data-preload', lazy=False)}
+      <video class="hero-video" muted loop playsinline preload="none" poster="assets/video/hero-m.jpg" data-src="assets/video/hero-m.mp4" aria-hidden="true"></video>
+    </div>
   </div>
   <div class="hero-content" id="heroContent">
     <div class="hero-meta">
-      <span class="label hero-up" style="--d:1.05s">MT Auto Care — Car Care Studio</span>
-      <p class="hero-up" style="--d:1.2s">Chăm sóc, phục hồi và nâng cấp ô tô với sự chính xác của người làm nghề — để chiếc xe luôn ở phiên bản tốt nhất.</p>
+      <span class="label hero-up" style="--d:1.05s">MT Auto — Nâng niu xế yêu</span>
+      <p class="hero-up" style="--d:1.2s">Trung tâm chăm sóc và nâng cấp ô tô tại Pleiku: độ đèn, màn hình, phanh, mâm và chăm sóc xe — làm tỉ mỉ, tư vấn đúng nhu cầu.</p>
     </div>
     <h1 class="hero-title" data-split-now>
-      <span class="row"><span>Chăm chút</span><small>(01) Detailing<br>(02) Restoration<br>(03) Upgrades</small></span>
+      <span class="row"><span>Chăm chút</span><small>(01) Độ đèn<br>(02) Màn hình<br>(03) Phanh – mâm<br>(04) Chăm sóc</small></span>
       <span class="row"><span>từng <span class="accent">chi tiết.</span></span></span>
     </h1>
     <div class="hero-bar mono hero-up" style="--d:1.4s">
@@ -266,57 +307,57 @@ home = f'''
 
 <div class="ticker" aria-hidden="true">
   <div class="ticker-track" id="ticker">
-    <div class="ticker-group"><span>Chăm sóc chuyên sâu</span><b>✦</b><span>Phục hồi nội ngoại thất</span><b>✦</b><span>Bảo vệ bề mặt sơn</span><b>✦</b><span>Nâng cấp tiện nghi</span><b>✦</b><span>Tư vấn tận tâm</span><b>✦</b></div>
+    <div class="ticker-group"><span>Độ đèn bi LED</span><b>✦</b><span>Màn hình Android</span><b>✦</b><span>Phanh Brembo</span><b>✦</b><span>Mâm thể thao</span><b>✦</b><span>Ốp gầm</span><b>✦</b><span>Phủ kính</span><b>✦</b><span>Vô lăng carbon</span><b>✦</b><span>Âm thanh</span><b>✦</b></div>
   </div>
 </div>
 
 <section class="sec wrap" id="about">
   <div class="sec-head">
-    <span class="label" data-fade>(01) Studio</span>
-    <p class="intro-text" data-scrub>MT Auto Care là studio chăm sóc ô tô dành cho những người coi trọng chi tiết. Chúng tôi làm việc chậm rãi, chính xác và minh bạch — vì một chiếc xe đẹp không đến từ sự vội vàng.</p>
+    <span class="label" data-fade>(01) Về MT Auto</span>
+    <p class="intro-text" data-scrub>MT Auto là trung tâm chăm sóc và nâng cấp ô tô tại Pleiku. Từ bộ bi LED, màn hình Android đến heo phanh Brembo — mỗi món đồ chơi đều được tư vấn đúng nhu cầu và lắp đặt chỉn chu, để bạn thêm yêu chiếc xe của mình.</p>
   </div>
   <div class="intro-grid">
     <div class="intro-a">
-      <div class="intro-media" data-img>{img(RED, 1200, 'Xe thể thao màu đỏ', ' data-speed="0.1"')}</div>
-      <div class="intro-cap mono muted" data-fade><span>Chi tiết / 01</span><span>Ngoại thất</span></div>
+      <div class="intro-media" data-img>{im('storefront', 'Mặt tiền xưởng MT Auto', ' data-speed="0.1"')}</div>
+      <div class="intro-cap mono muted" data-fade><span>Xưởng / 71A Tôn Thất Tùng</span><span>Pleiku</span></div>
     </div>
     <div class="intro-b">
-      <div class="intro-media" data-img style="--d:.15s">{img(DETAIL, 1400, 'Chi tiết ô tô', ' data-speed="-0.08"')}</div>
-      <div class="intro-cap mono muted" data-fade><span>Chi tiết / 02</span><span>Hoàn thiện</span></div>
+      <div class="intro-media" data-img style="--d:.15s">{im('shop-xpander', 'Mitsubishi Xpander độ bi LED tại MT Auto', ' data-speed="-0.08"')}</div>
+      <div class="intro-cap mono muted" data-fade><span>Bàn giao / Mitsubishi Xpander</span><span>Độ bi LED</span></div>
     </div>
   </div>
   <div class="feats">
-    <div class="feat" data-fade><span class="mono">— A</span><h3>Chính xác</h3><p>Mỗi công đoạn có tiêu chuẩn rõ ràng, được kiểm tra trước khi bàn giao.</p></div>
-    <div class="feat" data-fade style="--d:.1s"><span class="mono">— B</span><h3>Minh bạch</h3><p>Tư vấn dựa trên tình trạng thực tế, báo giá rõ ràng trước khi thực hiện.</p></div>
-    <div class="feat" data-fade style="--d:.2s"><span class="mono">— C</span><h3>Tận tâm</h3><p>Lắng nghe nhu cầu riêng và đồng hành cùng bạn sau khi nhận xe.</p></div>
+    <div class="feat" data-fade><span class="mono">— A</span><h3>Hàng chính hãng</h3><p>Sản phẩm từ các thương hiệu uy tín như X-Light, Steelmate, Brembo, Bosch, Meguiar’s.</p></div>
+    <div class="feat" data-fade style="--d:.1s"><span class="mono">— B</span><h3>Tư vấn đúng xe</h3><p>Đề xuất món đồ phù hợp với dòng xe, nhu cầu và ngân sách — báo giá rõ trước khi làm.</p></div>
+    <div class="feat" data-fade style="--d:.2s"><span class="mono">— C</span><h3>Lắp đặt chỉn chu</h3><p>Đội thợ làm cẩn thận, gọn gàng, kiểm tra kỹ cùng bạn trước khi bàn giao.</p></div>
   </div>
 </section>
 
 <section class="sec wrap" id="services" style="padding-top:0">
   <div class="sec-head">
     <span class="label" data-fade>(02) Dịch vụ</span>
-    <h2 class="h-xl" data-split>Ba chuyên môn. Một tiêu chuẩn.</h2>
+    <h2 class="h-xl" data-split>Bốn nhóm dịch vụ. Một tiêu chuẩn.</h2>
   </div>
   <div class="stack">{cards}
   </div>
 </section>
 
-<section class="zoom" id="zoom" aria-label="Triết lý MT Auto Care">
+<section class="zoom" id="zoom" aria-label="Xưởng MT Auto">
   <div class="zoom-stick" id="zoomStick">
-    <div class="zoom-img">{img(RED, 2200, 'Đường nét xe thể thao')}</div>
-    <div class="zoom-hud mono"><span>(03) Triết lý</span><span id="zoomPct">000%</span></div>
-    <div class="zoom-words" aria-hidden="true"><span class="l">Từng</span><span class="r">milimet.</span></div>
+    <div class="zoom-img">{im('shop-overhead', 'Toàn cảnh xưởng MT Auto')}</div>
+    <div class="zoom-hud mono"><span>(03) Xưởng MT Auto</span><span id="zoomPct">000%</span></div>
+    <div class="zoom-words" aria-hidden="true"><span class="l">Nâng niu</span><span class="r">xế yêu.</span></div>
     <div class="zoom-cap">
-      <h2 class="h-l">Không chỉ là chăm sóc xe. Đó là sự tôn trọng dành cho chiếc xe.</h2>
-      <p>Mỗi chiếc xe đều xứng đáng được quan tâm đúng cách. MT Auto Care hướng tới trải nghiệm chỉn chu, rõ ràng và phù hợp với nhu cầu riêng của từng khách hàng.</p>
+      <h2 class="h-l">Chiếc xe của bạn, được chăm như xe của chúng tôi.</h2>
+      <p>Không gian xưởng rộng rãi, sạch sẽ cùng đội thợ tận tâm — mỗi chiếc xe ra về đều đẹp hơn, tiện nghi hơn và an toàn hơn.</p>
     </div>
   </div>
 </section>
-
+''' + reels('(04) Video') + f'''
 <section class="sec wrap" id="process">
   <div class="process-grid">
     <aside class="process-aside">
-      <span class="label" data-fade>(04) Quy trình</span>
+      <span class="label" data-fade>(05) Quy trình</span>
       <h2 class="h-l" data-split>Từ lúc bạn đến, đến lúc bạn lăn bánh.</h2>
       <div class="process-count" aria-hidden="true">
         <span class="big"><span id="pcount"><b>01</b><b>02</b><b>03</b><b>04</b></span></span>
@@ -324,10 +365,10 @@ home = f'''
       </div>
     </aside>
     <div class="process-steps">
-      <div class="pstep"><span class="mono">Bước 01</span><h3>Tiếp nhận &amp; lắng nghe</h3><p>Trao đổi về tình trạng xe, thói quen sử dụng và điều bạn mong muốn. Mọi giải pháp đều bắt đầu từ việc hiểu đúng nhu cầu.</p><div class="tags"><span>Trao đổi</span><span>Ghi nhận</span></div></div>
-      <div class="pstep"><span class="mono">Bước 02</span><h3>Kiểm tra &amp; đề xuất</h3><p>Đánh giá thực tế từng hạng mục, đề xuất phương án phù hợp kèm chi phí và thời gian rõ ràng trước khi bắt đầu.</p><div class="tags"><span>Đánh giá</span><span>Báo giá</span></div></div>
-      <div class="pstep"><span class="mono">Bước 03</span><h3>Thực hiện tỉ mỉ</h3><p>Từng công đoạn được thực hiện cẩn thận theo quy chuẩn kỹ thuật, với sản phẩm và dụng cụ phù hợp cho từng bề mặt.</p><div class="tags"><span>Kỹ thuật</span><span>Kiểm soát</span></div></div>
-      <div class="pstep"><span class="mono">Bước 04</span><h3>Bàn giao &amp; đồng hành</h3><p>Kiểm tra cùng bạn khi nhận xe, hướng dẫn bảo quản và sẵn sàng hỗ trợ trong suốt quá trình sử dụng.</p><div class="tags"><span>Bàn giao</span><span>Hỗ trợ</span></div></div>
+      <div class="pstep"><span class="mono">Bước 01</span><h3>Tiếp nhận &amp; tư vấn</h3><p>Trao đổi về dòng xe, thói quen sử dụng và điều bạn mong muốn để chọn đúng món đồ phù hợp.</p><div class="tags"><span>Trao đổi</span><span>Tư vấn</span></div></div>
+      <div class="pstep"><span class="mono">Bước 02</span><h3>Báo giá rõ ràng</h3><p>Đưa ra phương án, sản phẩm và chi phí cụ thể trước khi bắt đầu — không phát sinh bất ngờ.</p><div class="tags"><span>Phương án</span><span>Báo giá</span></div></div>
+      <div class="pstep"><span class="mono">Bước 03</span><h3>Lắp đặt tỉ mỉ</h3><p>Đội thợ tháo lắp cẩn thận, đi dây gọn gàng, giữ nguyên zin những gì cần giữ.</p><div class="tags"><span>Kỹ thuật</span><span>Gọn gàng</span></div></div>
+      <div class="pstep"><span class="mono">Bước 04</span><h3>Bàn giao &amp; hỗ trợ</h3><p>Kiểm tra cùng bạn khi nhận xe, hướng dẫn sử dụng và sẵn sàng hỗ trợ về sau.</p><div class="tags"><span>Bàn giao</span><span>Hỗ trợ</span></div></div>
     </div>
   </div>
 </section>
@@ -336,26 +377,11 @@ home = f'''
   <div class="gallery-head wrap">
     <h2 class="h-l" data-split>Chi tiết tạo nên khác biệt.</h2>
     <div data-fade>{btn('Xem công trình', 'cong-trinh.html')}</div>
-  </div>
-  <div class="grow">
-    <figure class="w">{img(HERO, 1000, 'Xe thể thao')}<figcaption>MT / 01</figcaption></figure>
-    <figure class="t">{img(PORSCHE, 700, 'Xe thể thao', fallback=WASH)}<figcaption>MT / 02</figcaption></figure>
-    <figure class="w">{img(INTERIOR, 1000, 'Nội thất ô tô')}<figcaption>MT / 03</figcaption></figure>
-    <figure class="t">{img(DETAIL, 700, 'Chi tiết ô tô')}<figcaption>MT / 04</figcaption></figure>
-    <figure class="w">{img(RED, 1000, 'Xe thể thao màu đỏ')}<figcaption>MT / 05</figcaption></figure>
-  </div>
-  <div class="grow">
-    <figure class="t">{img(WASH, 700, 'Ô tô sau chăm sóc')}<figcaption>MT / 06</figcaption></figure>
-    <figure class="w">{img(MUSTANG, 1000, 'Xe cổ điển', fallback=HERO)}<figcaption>MT / 07</figcaption></figure>
-    <figure class="t">{img(RED, 700, 'Đường nét xe')}<figcaption>MT / 08</figcaption></figure>
-    <figure class="w">{img(ORANGE, 1000, 'Siêu xe', fallback=INTERIOR)}<figcaption>MT / 09</figcaption></figure>
-    <figure class="t">{img(HERO, 700, 'Xe thể thao')}<figcaption>MT / 10</figcaption></figure>
-  </div>
+  </div>{rows}
 </section>
-
-'''+ visit('ghe-xuong') + f'''
+''' + visit('ghe-xuong') + f'''
 <section class="contact wrap">
-  <span class="label" data-fade>(05) Đặt lịch</span>
+  <span class="label" data-fade>(06) Đặt lịch</span>
   <a href="lien-he.html#booking" class="cta-big" data-cursor="view" data-cursor-label="Đặt lịch"><span data-split>Hãy bắt đầu</span><br><span data-split style="--d:.1s">cùng MT</span> <span class="arrow">↗</span></a>
   <div class="contact-grid">
     <div class="contact-info" data-fade>
@@ -366,31 +392,32 @@ home = f'''
       <div><span class="mono">Facebook</span><a class="big ulink" href="{FB}" target="_blank" rel="noopener">/mt.autochamsocxe</a></div>
     </div>
   </div>
-</section>'''
-page('index.html', 'MT Auto Care — Studio chăm sóc ô tô',
-     'MT Auto Care — studio chăm sóc, phục hồi và nâng cấp ô tô. Hotline 0823 418 418.',
+</section>''' + VPLAYER
+page('index.html', 'MT Auto — Trung tâm chăm sóc & nâng cấp ô tô tại Pleiku',
+     'MT Auto: độ đèn bi LED, màn hình Android, phanh Brembo, mâm, ốp gầm và chăm sóc xe tại 71A Tôn Thất Tùng, Pleiku. Hotline 0823 418 418.',
      home, nextp('dich-vu.html', 'Dịch vụ'))
 
 # ----------------------------------------------------------------- SERVICES
 hrows = ''.join(f'''
     <a class="hrow" href="#{sid}"><span class="mono">({num})</span><h3>{title}</h3><p>{desc}</p><span class="go">→</span></a>'''
-    for sid, num, en, title, svc, desc, items, pid in SERVICES)
-hfloat = ''.join(f'<img src="{u(pid, 600)}" alt="">' for *_, pid in SERVICES)
-snav = ''.join(f'<a href="#{sid}"><i></i>{svc.replace("&amp;", "&")}</a>' for sid, num, en, title, svc, desc, items, pid in SERVICES)
+    for sid, num, en, title, svc, desc, items, pic, _ in SERVICES)
+hfloat = ''.join(f'<img src="assets/img/{pic}.jpg" alt="">' for *_, pic, _x in SERVICES)
+snav = ''.join(f'<a href="#{sid}"><i></i>{plain(svc)}</a>' for sid, num, en, title, svc, *_ in SERVICES)
 sblocks = ''.join(f'''
       <article class="sblock" id="{sid}">
-        <div class="sblock-media" data-img>{img(pid, 1100, title.replace('&amp;', 'và'), ' data-speed="0.1"')}</div>
+        <div class="sblock-media" data-img>{im(detail, plain(title), ' data-speed="0.1"')}</div>
         <div>
           <span class="mono" data-fade>({num}) {en}</span>
           <h2 data-split>{title}</h2>
           <p data-fade>{desc}</p>
           <ul data-fade>{''.join(f'<li>{it}</li>' for it in items)}</ul>
-          <div data-fade>{btn('Đặt lịch dịch vụ', 'lien-he.html#booking', f' data-service="{svc.replace("&amp;", "&")}"')}</div>
+          <div data-fade>{btn('Đặt lịch dịch vụ', 'lien-he.html#booking', f' data-service="{plain(svc)}"')}</div>
         </div>
-      </article>''' for sid, num, en, title, svc, desc, items, pid in SERVICES)
+      </article>''' for sid, num, en, title, svc, desc, items, pic, detail in SERVICES)
 
-services = phero('Dịch vụ — Services', 'Dịch vụ', 'Dịch vụ <span class="accent">chuyên sâu.</span>',
-                 'Ba nhóm dịch vụ cốt lõi, cùng một tiêu chuẩn: tỉ mỉ, minh bạch và đúng nhu cầu của chiếc xe.') + f'''
+services = phero('Dịch vụ — Services', 'Dịch vụ', 'Dịch vụ <span class="accent">tại MT Auto.</span>',
+                 'Bốn nhóm dịch vụ chính — từ đồ chơi nâng cấp đến chăm sóc định kỳ — cùng một tiêu chuẩn: hàng chính hãng, tư vấn đúng xe, lắp đặt chỉn chu.',
+                 ('team-work', 'Đội thợ MT Auto đang làm việc', 'center 80%')) + f'''
 
 <section class="sec wrap">
   <div class="hindex">{hrows}
@@ -413,81 +440,90 @@ services = phero('Dịch vụ — Services', 'Dịch vụ', 'Dịch vụ <span c
       <h2 class="h-l" style="margin-top:24px" data-split>Những điều bạn có thể muốn biết.</h2>
     </div>
     <div class="faq-list" data-fade>
-      <div class="faq-item open"><button class="faq-q" aria-expanded="true">Tôi có cần đặt lịch trước không?<i></i></button><div class="faq-a"><div><p>Nên đặt lịch trước để MT Auto Care chủ động sắp xếp thời gian và chuẩn bị tốt nhất cho chiếc xe của bạn. Bạn có thể gọi hotline, nhắn Zalo hoặc Messenger.</p></div></div></div>
-      <div class="faq-item"><button class="faq-q" aria-expanded="false">Chi phí dịch vụ được tính như thế nào?<i></i></button><div class="faq-a"><div><p>Chi phí phụ thuộc vào dòng xe, tình trạng thực tế và hạng mục bạn chọn. Chúng tôi kiểm tra và báo giá rõ ràng trước khi bắt đầu thực hiện.</p></div></div></div>
-      <div class="faq-item"><button class="faq-q" aria-expanded="false">Thời gian thực hiện mất bao lâu?<i></i></button><div class="faq-a"><div><p>Mỗi dịch vụ có thời gian khác nhau. Thời gian dự kiến sẽ được thông báo cụ thể khi tư vấn để bạn chủ động sắp xếp.</p></div></div></div>
-      <div class="faq-item"><button class="faq-q" aria-expanded="false">Tôi chưa biết xe mình cần gì, phải làm sao?<i></i></button><div class="faq-a"><div><p>Bạn chỉ cần mô tả tình trạng xe và mong muốn của mình. Đội ngũ MT Auto Care sẽ kiểm tra và tư vấn phương án phù hợp nhất với nhu cầu và ngân sách.</p></div></div></div>
+      <div class="faq-item open"><button class="faq-q" aria-expanded="true">Tôi có cần đặt lịch trước không?<i></i></button><div class="faq-a"><div><p>Nên đặt lịch trước để MT Auto chuẩn bị sẵn sản phẩm và sắp xếp thời gian cho xe của bạn. Bạn có thể gọi hotline {PHONE_TXT}, nhắn Zalo hoặc Messenger.</p></div></div></div>
+      <div class="faq-item"><button class="faq-q" aria-expanded="false">Chi phí được tính như thế nào?<i></i></button><div class="faq-a"><div><p>Chi phí phụ thuộc vào dòng xe, sản phẩm và hạng mục bạn chọn. MT Auto tư vấn và báo giá rõ ràng trước khi bắt đầu làm.</p></div></div></div>
+      <div class="faq-item"><button class="faq-q" aria-expanded="false">Lắp đặt mất bao lâu?<i></i></button><div class="faq-a"><div><p>Mỗi hạng mục có thời gian khác nhau. Thời gian dự kiến sẽ được báo cụ thể khi tư vấn để bạn chủ động sắp xếp.</p></div></div></div>
+      <div class="faq-item"><button class="faq-q" aria-expanded="false">Tôi chưa biết nên nâng cấp gì cho xe?<i></i></button><div class="faq-a"><div><p>Bạn chỉ cần cho biết dòng xe và điều bạn muốn cải thiện — sáng hơn, tiện nghi hơn hay thể thao hơn. MT Auto sẽ gợi ý phương án phù hợp với nhu cầu và ngân sách.</p></div></div></div>
     </div>
   </div>
 </section>'''
-page('dich-vu.html', 'Dịch vụ — MT Auto Care',
-     'Chăm sóc & làm đẹp, phục hồi nội ngoại thất và nâng cấp tiện nghi ô tô tại MT Auto Care.',
+page('dich-vu.html', 'Dịch vụ — MT Auto Pleiku',
+     'Độ đèn bi LED, màn hình Android & âm thanh, phanh – mâm – ốp gầm, chăm sóc & nội thất ô tô tại MT Auto Pleiku.',
      services, nextp('cong-trinh.html', 'Công trình'))
 
 # ----------------------------------------------------------------- WORKS
 WORKS = [
-    ('cham-soc', 'Chăm sóc', 'Đánh bóng &amp; phủ bảo vệ', HERO, 'wide'),
-    ('phuc-hoi', 'Phục hồi', 'Phục hồi chi tiết ngoại thất', DETAIL, ''),
-    ('nang-cap', 'Nâng cấp', 'Nâng cấp nội thất', INTERIOR, ''),
-    ('cham-soc', 'Chăm sóc', 'Vệ sinh chi tiết toàn xe', WASH, ''),
-    ('cham-soc', 'Chăm sóc', 'Làm đẹp ngoại thất', RED, 'wide'),
-    ('phuc-hoi', 'Phục hồi', 'Phục hồi xe cổ điển', MUSTANG, 'wide'),
-    ('nang-cap', 'Nâng cấp', 'Phụ kiện theo yêu cầu', PORSCHE, ''),
-    ('phuc-hoi', 'Phục hồi', 'Làm mới bề mặt', ORANGE, ''),
+    ('do-den', 'shop-xpander', 'Độ bi X-Light V12 — Xpander', 'wide'),
+    ('do-den', 'den-c3pro', 'Bi LED Steelmate C3-Pro', ''),
+    ('man-hinh', 'man-d14', 'Android box D14 Ultra — Ford', ''),
+    ('phanh-mam', 'phanh-brembo', 'Bộ phanh Brembo', ''),
+    ('cham-soc', 'vo-lang-carbon', 'Vô lăng carbon — Kia', ''),
+    ('phanh-mam', 'mam-do', 'Mâm thể thao &amp; heo Brembo', ''),
+    ('do-den', 'xlight-cover', 'Độ bi X-Light V20', 'wide'),
+    ('man-hinh', 'loa-steelmate', 'Loa sub Steelmate', ''),
+    ('phanh-mam', 'gam-vinfast', 'Ốp gầm B-F — VinFast', 'wide'),
+    ('do-den', 'den-gam', 'Đèn gầm sau khi lắp', ''),
+    ('cham-soc', 'cs-phu-kinh', 'Phủ kính Meguiar’s', ''),
+    ('man-hinh', 'man-icar', 'Màn hình iCar Elliview — Toyota', ''),
+    ('phanh-mam', 'phanh-amg', 'Heo phanh AMG', 'wide'),
+    ('cham-soc', 'noi-that-da', 'Bọc da bệ tì tay', ''),
+    ('man-hinh', 'cam-70mai', 'Camera hành trình 70mai A200', ''),
+    ('do-den', 'den-steelmate', 'Cặp bi Steelmate', ''),
+    ('cham-soc', 'cs-nhot', 'Thay dầu nhớt — Toyota', ''),
+    ('phanh-mam', 'gam-bf', 'Ốp gầm B-F', ''),
+    ('man-hinh', 'man-d14-mazda', 'D14 Ultra — Mazda', ''),
+    ('do-den', 'den-xlight-ford', 'Độ bi X-Light — Ford', 'wide'),
+    ('cham-soc', 'noi-that-ni', 'Bọc nỉ bệ tì tay', ''),
+    ('phanh-mam', 'phanh-lap', 'Lắp heo phanh', ''),
+    ('man-hinh', 'man-gotech', 'Màn hình Gotech', ''),
+    ('cham-soc', 'cs-bosch', 'Gạt mưa Bosch', ''),
+    ('do-den', 'den-thao', 'Tháo đèn, chuẩn bị độ bi', ''),
+    ('cham-soc', 'team-work', 'Đội thợ MT Auto', 'wide'),
+    ('man-hinh', 'man-zestech', 'Màn hình Android', ''),
+    ('phanh-mam', 'mam-brembo-set', 'Mâm, heo phanh &amp; ốc Rays', ''),
+    ('cham-soc', 'vo-lang-kia', 'Khoang lái sau nâng cấp', ''),
 ]
-FB_FOR = {MUSTANG: HERO, PORSCHE: WASH, ORANGE: INTERIOR}
+CAT = {sid: plain(svc) for sid, num, en, title, svc, *_ in SERVICES}
 works = ''.join(f'''
-    <figure class="work {wide}" data-cat="{cat}" data-title="{t.replace('&amp;', '&')}" tabindex="0" data-cursor="view" data-fade style="--d:{(i % 3) * .08:.2f}s">{img(pid, 1400 if wide else 800, t.replace('&amp;', 'và'), fallback=FB_FOR.get(pid))}<figcaption><b>{t}</b><span class="mono">{lbl}</span></figcaption></figure>'''
-    for i, (cat, lbl, t, pid, wide) in enumerate(WORKS))
+    <figure class="work {wide}" data-cat="{cat}" data-title="{plain(t)}" tabindex="0" data-cursor="view" data-fade style="--d:{(i % 3) * .08:.2f}s">{im(n, plain(t))}<figcaption><b>{t}</b><span class="mono">{CAT[cat]}</span></figcaption></figure>'''
+    for i, (cat, n, t, wide) in enumerate(WORKS))
+filters = ''.join(f'\n    <button data-filter="{sid}">{plain(svc)}</button>' for sid, num, en, title, svc, *_ in SERVICES)
 
-works_page = phero('Công trình — Works', 'Công trình', 'Công trình <span class="accent">đã thực hiện.</span>',
-                   'Một vài khoảnh khắc từ xưởng. Hình ảnh hiện là ảnh minh họa và sẽ được thay bằng ảnh thực tế của MT Auto Care.') + f'''
+works_page = phero('Công trình — Works', 'Công trình', 'Công trình <span class="accent">thực tế.</span>',
+                   'Hình ảnh và video thật từ xưởng MT Auto — những chiếc xe đã được nâng cấp và chăm sóc tại 71A Tôn Thất Tùng, Pleiku.') + f'''
 
 <section class="sec wrap" style="padding-top:clamp(60px,10vh,110px)">
   <div class="filters" role="group" aria-label="Lọc theo dịch vụ">
-    <button class="on" data-filter="all">Tất cả</button>
-    <button data-filter="cham-soc">Chăm sóc</button>
-    <button data-filter="phuc-hoi">Phục hồi</button>
-    <button data-filter="nang-cap">Nâng cấp</button>
+    <button class="on" data-filter="all">Tất cả</button>{filters}
   </div>
   <div class="works">{works}
   </div>
 </section>
-
-<section class="sec wrap" style="padding-top:0">
-  <div class="sec-head">
-    <span class="label" data-fade>Trước / Sau</span>
-    <h2 class="h-l" data-split>Kéo để thấy sự khác biệt.</h2>
-  </div>
-  <div class="ba" data-fade data-cursor="view" data-cursor-label="Kéo" aria-label="So sánh trước và sau, dùng phím mũi tên để kéo">
-    <img src="{u(RED, 1800)}" alt="Sau khi chăm sóc">
-    <img class="before" src="{u(RED, 1800)}" alt="Trước khi chăm sóc">
-    <span class="tag l">Trước</span><span class="tag r">Sau</span>
-    <span class="handle"></span>
-  </div>
-  <p class="ba-note mono">Ảnh minh họa — sẽ thay bằng cặp ảnh trước/sau thực tế.</p>
-</section>
+''' + reels('Video') + '''
 
 <div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Xem ảnh">
   <figure><img alt=""><figcaption><span class="cap"></span><span class="num mono"></span></figcaption></figure>
   <button class="x" aria-label="Đóng">✕</button>
   <button class="prev" aria-label="Ảnh trước">←</button>
   <button class="next" aria-label="Ảnh sau">→</button>
-</div>'''
-page('cong-trinh.html', 'Công trình — MT Auto Care',
-     'Hình ảnh các công trình chăm sóc, phục hồi và nâng cấp ô tô tại MT Auto Care.',
+</div>''' + VPLAYER
+page('cong-trinh.html', 'Công trình — MT Auto Pleiku',
+     'Hình ảnh và video thực tế các công trình độ đèn, màn hình, phanh, mâm và chăm sóc xe tại MT Auto Pleiku.',
      works_page, nextp('lien-he.html', 'Liên hệ'))
 
 # ----------------------------------------------------------------- CONTACT
+chips = ''.join(f'\n          <label class="chip"><input type="radio" name="service" value="{plain(svc)}"{" checked" if i == 0 else ""}><span>{svc}</span></label>'
+                for i, (sid, num, en, title, svc, *_) in enumerate(SERVICES))
 contact = phero('Liên hệ — Contact', 'Liên hệ', 'Ghé thăm <span class="accent">MT Auto.</span>',
-                'Gọi điện, nhắn tin hoặc để lại thông tin — chúng tôi sẽ liên hệ lại để tư vấn cho chiếc xe của bạn.') + f'''
+                'Gọi điện, nhắn tin hoặc để lại thông tin — MT Auto sẽ liên hệ lại để tư vấn cho chiếc xe của bạn.',
+                ('storefront-wide', 'Mặt tiền xưởng MT Auto')) + f'''
 
 <section class="sec wrap" style="padding-top:clamp(60px,10vh,110px)">
   <div class="cards">
     <a class="ccard" href="tel:{PHONE}" data-fade><span class="mono">Hotline</span><b>{PHONE_TXT}</b><span class="go">→</span></a>
     <a class="ccard" href="{ZALO}" target="_blank" rel="noopener" data-fade style="--d:.08s"><span class="mono">Zalo</span><b>Chat Zalo<br>{PHONE_TXT}</b><span class="go">→</span></a>
     <a class="ccard" href="{FB}" target="_blank" rel="noopener" data-fade style="--d:.16s"><span class="mono">Facebook</span><b>/mt.autochamsocxe</b><span class="go">→</span></a>
-    <a class="ccard wide" href="{MAP_DIR}" target="_blank" rel="noopener" data-fade><span class="mono">Địa chỉ xưởng</span><b>71A Tôn Thất Tùng,<br>Phường Pleiku, Gia Lai</b><span class="go">→</span></a>
+    <a class="ccard wide" href="{MAP_DIR}" target="_blank" rel="noopener" data-fade><span class="mono">Địa chỉ xưởng · 7:15 – 18:00</span><b>71A Tôn Thất Tùng,<br>Phường Pleiku, Gia Lai</b><span class="go">→</span></a>
   </div>
 </section>
 
@@ -498,20 +534,17 @@ contact = phero('Liên hệ — Contact', 'Liên hệ', 'Ghé thăm <span class=
     <div class="contact-info" data-fade>
       <div><span class="mono">Hotline</span><a class="big ulink" href="tel:{PHONE}">{PHONE_TXT}</a></div>
       <div><span class="mono">Email</span><a class="big ulink" href="mailto:{EMAIL}" style="word-break:break-all">{EMAIL}</a></div>
-      <div><span class="mono">Phản hồi</span><p style="color:rgba(247,246,243,.7);max-width:340px">Chúng tôi sẽ liên hệ lại để tư vấn chi tiết cho chiếc xe của bạn.</p></div>
+      <div><span class="mono">Phản hồi</span><p style="color:rgba(247,246,243,.7);max-width:340px">MT Auto sẽ liên hệ lại để tư vấn chi tiết cho chiếc xe của bạn.</p></div>
     </div>
     <form class="form" id="booking-form" data-fade style="--d:.1s" novalidate>
       <div class="field full"><label>Dịch vụ quan tâm</label>
-        <div class="chips" role="radiogroup" aria-label="Dịch vụ quan tâm">
-          <label class="chip"><input type="radio" name="service" value="Chăm sóc & làm đẹp" checked><span>Chăm sóc &amp; làm đẹp</span></label>
-          <label class="chip"><input type="radio" name="service" value="Phục hồi nội ngoại thất"><span>Phục hồi</span></label>
-          <label class="chip"><input type="radio" name="service" value="Nâng cấp tiện nghi"><span>Nâng cấp</span></label>
+        <div class="chips" role="radiogroup" aria-label="Dịch vụ quan tâm">{chips}
           <label class="chip"><input type="radio" name="service" value="Khác"><span>Khác</span></label>
         </div>
       </div>
       <div class="field"><label for="f-name">Họ và tên</label><input id="f-name" name="name" placeholder="Nguyễn Văn A" autocomplete="name"></div>
       <div class="field"><label for="f-phone">Số điện thoại</label><input id="f-phone" name="phone" type="tel" placeholder="09xx xxx xxx" autocomplete="tel"></div>
-      <div class="field full"><label for="f-car">Dòng xe</label><input id="f-car" name="car" placeholder="Ví dụ: Mercedes C300 2022"></div>
+      <div class="field full"><label for="f-car">Dòng xe</label><input id="f-car" name="car" placeholder="Ví dụ: Mazda CX-5 2022"></div>
       <div class="field full"><label for="f-msg">Lời nhắn</label><textarea id="f-msg" name="message" rows="2" placeholder="Mô tả ngắn nhu cầu của bạn"></textarea></div>
       <div class="form-foot">
         <small id="formNote">Nút gửi sẽ mở ứng dụng email của bạn với nội dung đã điền sẵn.</small>
@@ -520,9 +553,8 @@ contact = phero('Liên hệ — Contact', 'Liên hệ', 'Ghé thăm <span class=
     </form>
   </div>
 </section>
-
-'''+ visit('map')
-page('lien-he.html', 'Liên hệ — MT Auto Care',
-     'Liên hệ MT Auto Care: hotline 0823 418 418, Zalo, Facebook và đặt lịch chăm sóc xe.',
+''' + visit('map')
+page('lien-he.html', 'Liên hệ — MT Auto Pleiku',
+     'Liên hệ MT Auto: 71A Tôn Thất Tùng, Phường Pleiku, Gia Lai. Hotline / Zalo 0823 418 418. Mở cửa 7:15 – 18:00.',
      contact, nextp('index.html', 'Trang chủ'))
 print('ok')

@@ -142,7 +142,7 @@ if (sm.on) {
     if (e.ctrlKey) return;
     if (body.classList.contains('is-loading') || (pt && pt.classList.contains('out'))) { e.preventDefault(); return; }
     if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
-    if (e.target.closest && e.target.closest('textarea, .lb')) return;
+    if (e.target.closest && e.target.closest('textarea, .lb, .vp')) return;
     if (body.classList.contains('menu-open')) return;
     e.preventDefault();
     let d = e.deltaY; if (e.deltaMode === 1) d *= 40; else if (e.deltaMode === 2) d *= innerHeight;
@@ -465,6 +465,37 @@ $$('.ba').forEach(ba => {
     if (e.key === 'ArrowRight') ba.style.setProperty('--p', clamp(p + 5, 0, 100) + '%');
   });
 });
+
+/* ---------- videos: mobile hero loop, reel previews, full player ---------- */
+{
+  const hv = $('.hero-video');
+  if (hv && !reduced && matchMedia('(max-width: 640px)').matches) {
+    hv.src = hv.dataset.src; hv.play().catch(() => {});
+  }
+  const previews = $$('.reel-phone video');
+  if (previews.length && 'IntersectionObserver' in window && !reduced) {
+    const vio = new IntersectionObserver(es => es.forEach(en => {
+      const v = en.target;
+      if (en.isIntersecting) { if (!v.src) v.src = v.dataset.src; v.play().catch(() => {}); }
+      else v.pause();
+    }), { threshold: .35 });
+    previews.forEach(v => vio.observe(v));
+  }
+  const vp = $('#vp');
+  if (vp) {
+    const pv = $('video', vp);
+    const close = () => { vp.classList.remove('open'); pv.pause(); body.style.overflow = ''; };
+    $$('.reel-phone').forEach(b => b.addEventListener('click', () => {
+      pv.src = b.dataset.full; pv.poster = $('video', b).poster;
+      vp.classList.add('open'); body.style.overflow = 'hidden';
+      pv.play().catch(() => {});
+      $('.x', vp).focus();
+    }));
+    $('.x', vp).addEventListener('click', close);
+    vp.addEventListener('click', e => { if (e.target === vp) close(); });
+    addEventListener('keydown', e => { if (e.key === 'Escape' && vp.classList.contains('open')) close(); });
+  }
+}
 
 /* ---------- booking form ---------- */
 function pickService() {
