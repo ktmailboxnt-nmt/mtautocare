@@ -182,7 +182,8 @@ body.loaded .hero-title .wd > span{transform:none}
 .stack{display:grid;padding-bottom:6vh}
 .card{position:sticky;top:calc(96px + var(--i) * 16px);height:min(78vh,740px);min-height:540px;margin-bottom:6vh;overflow:hidden;transform-origin:50% 0;will-change:transform}
 .card-in{position:absolute;inset:0;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr)}
-.card:nth-child(1) .card-in{background:var(--paper)}
+.card-in{background:var(--paper)}
+.card:nth-child(1) .card-in,.card:nth-child(4) .card-in{background:var(--paper)}
 .card:nth-child(2) .card-in{background:var(--ink);color:var(--paper)}
 .card:nth-child(3) .card-in{background:var(--stone)}
 .card-body{display:flex;flex-direction:column;justify-content:space-between;padding:clamp(26px,3vw,48px)}
