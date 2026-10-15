@@ -7,6 +7,23 @@ Options -Indexes
 # Friendly 404: send unknown addresses (e.g. old WordPress links) to the home page
 ErrorDocument 404 /index.html
 
+# ---- Security ----
+# Old WordPress copy and any leftover WP paths: never reachable from the web
+RedirectMatch 403 ^/wordpress-cu(/.*)?$
+RedirectMatch 403 ^/(wp-admin|wp-login\.php|xmlrpc\.php|wp-config\.php)
+# Hidden files (except Let's Encrypt validation) and backup/config files
+RedirectMatch 403 /\.(?!well-known)
+<FilesMatch "\.(bak|old|orig|sql|zip|tar|gz|log|ini|sh|py|md)$">
+  Require all denied
+</FilesMatch>
+
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()"
+</IfModule>
+
 # Cache static assets in the browser
 <IfModule mod_expires.c>
   ExpiresActive On
