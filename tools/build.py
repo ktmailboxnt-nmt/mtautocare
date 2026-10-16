@@ -69,7 +69,7 @@ def head(title, desc, fname):
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap&subset=vietnamese" rel="stylesheet">
 <script>document.documentElement.classList.add('js');try{{if(sessionStorage.getItem('mt-pt')==='1')document.documentElement.classList.add('pt-arrive')}}catch(e){{}}</script>
 <link rel="stylesheet" href="assets/css/style.css?v={ver('assets/css/style.css')}">
-<script type="application/ld+json">{{"@context":"https://schema.org","@type":"AutoRepair","name":"MT Auto Care","image":"{SITE_URL}assets/og.jpg","url":"{SITE_URL}","telephone":"+84823418418","email":"{EMAIL}","address":{{"@type":"PostalAddress","streetAddress":"71A Tôn Thất Tùng","addressLocality":"Phường Pleiku","addressRegion":"Gia Lai","addressCountry":"VN"}},"geo":{{"@type":"GeoCoordinates","latitude":{LAT},"longitude":{LNG}}},"hasMap":"{MAP_DIR}","sameAs":["{FB}"]}}</script>
+<script type="application/ld+json">{{"@context":"https://schema.org","@type":"AutoRepair","name":"MT Auto Care","image":"{SITE_URL}assets/og.jpg","url":"{SITE_URL}","telephone":"+84823418418","email":"{EMAIL}","address":{{"@type":"PostalAddress","streetAddress":"71A Tôn Thất Tùng","addressLocality":"Phường Pleiku","addressRegion":"Gia Lai","addressCountry":"VN"}},"geo":{{"@type":"GeoCoordinates","latitude":{LAT},"longitude":{LNG}}},"hasMap":"{MAP_DIR}","priceRange":"$$","openingHoursSpecification":[{{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],"opens":"07:15","closes":"18:00"}}],"areaServed":"Gia Lai","sameAs":["{FB}","{MAP_DIR}"]}}</script>
 <noscript><style>
 .loader,.cursor,.pt{{display:none!important}}
 body.is-loading{{overflow:auto!important}}
@@ -568,4 +568,10 @@ contact = phero('Liên hệ — Contact', 'Liên hệ', 'Ghé thăm <span class=
 page('lien-he.html', 'Liên hệ — MT Auto Pleiku',
      'Liên hệ MT Auto: 71A Tôn Thất Tùng, Phường Pleiku, Gia Lai. Hotline / Zalo 0823 418 418. Mở cửa 7:15 – 18:00.',
      contact, nextp('index.html', 'Trang chủ'))
+# ----------------------------------------------------------------- SEO files
+import datetime
+today = datetime.date.today().isoformat()
+urls = ''.join(f'  <url><loc>{SITE_URL}{"" if f == "index.html" else f}</loc><lastmod>{today}</lastmod><priority>{"1.0" if f == "index.html" else "0.8"}</priority></url>\n' for f, _ in PAGES)
+open(os.path.join(OUT, 'sitemap.xml'), 'w', encoding='utf-8').write(f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{urls}</urlset>\n')
+open(os.path.join(OUT, 'robots.txt'), 'w', encoding='utf-8').write(f'User-agent: *\nAllow: /\nDisallow: /wordpress-cu/\n\nSitemap: {SITE_URL}sitemap.xml\n')
 print('ok')
