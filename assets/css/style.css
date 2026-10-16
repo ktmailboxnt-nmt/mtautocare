@@ -689,3 +689,5 @@ body.loaded [data-split-now] .wd > span{transform:none}
 .brand.nologo::after{display:none}
 @keyframes logosheen{0%{background-position:160% 0}55%,100%{background-position:-60% 0}}
 @media (prefers-reduced-motion:reduce){.brand::after{animation:logosheen 3.8s cubic-bezier(.45,0,.25,1) 1.2s infinite!important}}
+.fab .fb{background:#1877f2}
+.fab .fb svg{width:26px;height:26px}

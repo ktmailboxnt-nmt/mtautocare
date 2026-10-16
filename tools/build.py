@@ -27,6 +27,8 @@ ZALO = f'https://zalo.me/{PHONE}'
 ICON_PHONE = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>'
 ICON_MSG = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.36 2 2 6.13 2 11.7c0 2.91 1.19 5.44 3.14 7.17.16.14.26.35.27.57l.05 1.78a.8.8 0 0 0 1.12.71l1.98-.87a.8.8 0 0 1 .53-.04c.91.25 1.88.38 2.91.38 5.64 0 10-4.13 10-9.7S17.64 2 12 2zm6 7.46-2.94 4.66a1.5 1.5 0 0 1-2.17.4l-2.34-1.75a.6.6 0 0 0-.72 0l-3.16 2.4c-.42.32-.97-.18-.69-.63l2.94-4.66a1.5 1.5 0 0 1 2.17-.4l2.34 1.75a.6.6 0 0 0 .72 0l3.16-2.4c.42-.32.97.18.69.63z"/></svg>'
 
+ICON_FB = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5 21v-7.5h2.5l.4-3h-2.9V8.6c0-.87.25-1.46 1.5-1.46h1.6V4.46A21 21 0 0 0 14.3 4.3c-2.3 0-3.8 1.4-3.8 3.95v2.25H8v3h2.5V21z"/></svg>'
+
 PAGES = [
     ('index.html', 'Trang chủ'),
     ('dich-vu.html', 'Dịch vụ'),
@@ -109,6 +111,7 @@ def nav(active):
 <div class="cursor" id="cursor" aria-hidden="true"><div class="cursor-dot"><span>Xem</span></div></div>
 
 <div class="fab" aria-label="Liên hệ nhanh">
+  <a class="fb" href="{FB}" target="_blank" rel="noopener" aria-label="Trang Facebook MT Auto">{ICON_FB}<span class="tip">Facebook MT Auto</span></a>
   <a class="msg" href="{MSG}" target="_blank" rel="noopener" aria-label="Nhắn Messenger">{ICON_MSG}<span class="tip">Nhắn Messenger</span></a>
   <a class="zalo" href="{ZALO}" target="_blank" rel="noopener" aria-label="Chat Zalo">Zalo<span class="tip">Chat Zalo</span></a>
   <a class="call" href="tel:{PHONE}" aria-label="Gọi {PHONE_TXT}">{ICON_PHONE}<span class="tip">Gọi {PHONE_TXT}</span></a>
